@@ -251,6 +251,55 @@ async function updateRec(id, fields) {
   return api(C.T[brand].p, { method:'PATCH', body:{records:[{id,fields}]} });
 }
 
+// ── SYNC LEADS → PIPELINE (auto-create missing) ──
+async function syncLeadsToPipeline() {
+  // 1. Get all leads
+  let leads=[], off=null;
+  do {
+    const qs={pageSize:'100'}; if(off) qs.offset=off;
+    const d = await api(C.T[brand].l, {qs});
+    leads = leads.concat(d.records||[]);
+    off = d.offset;
+  } while(off);
+
+  // 2. Get existing pipeline lead links
+  const linkedLeadIds = new Set();
+  deals.forEach(d => {
+    (d.fields.LEAD||[]).forEach(id => linkedLeadIds.add(id));
+  });
+
+  // 3. Find leads without pipeline record
+  const missing = leads.filter(l => !linkedLeadIds.has(l.id));
+  if (missing.length === 0) return 0;
+
+  // 4. Create pipeline records in batches of 10
+  let created = 0;
+  for (let i = 0; i < missing.length; i += 10) {
+    const batch = missing.slice(i, i+10);
+    const records = batch.map(l => {
+      const f = l.fields;
+      const nombre = [f.NOMBRE, f['APELLIDO PATERNO']].filter(Boolean).join(' ');
+      return {
+        fields: {
+          OPORTUNIDAD: nombre + ' - ' + (f.VEHICULO||'Sin vehiculo'),
+          'VALOR PIPELINE': f.PRECIO || 0,
+          ETAPA: 'Cita Agendada',
+          VEHICULO: f.VEHICULO || '',
+          TELEFONO: f.TELEFONO || '',
+          EMAIL: f.EMAIL || '',
+          FOLIO: f.FOLIO || '',
+          VENDEDOR: f['VENDEDOR DIGITAL'] || 'VENDEDOR DIGITAL',
+          FECHA_CREACION: f.fecha_registro || new Date().toISOString(),
+          LEAD: [l.id]
+        }
+      };
+    });
+    await api(C.T[brand].p, { method:'POST', body:{records} });
+    created += records.length;
+  }
+  return created;
+}
+
 // Also update Leads table for synced fields
 async function syncToLead(leadIds, fields) {
   if (!leadIds || !leadIds.length) return;
@@ -464,7 +513,15 @@ function filter(v) { q=v; render(); }
 
 async function refresh() {
   document.getElementById('K').innerHTML = '<div class="loading"><div class="spinner"></div>Cargando...</div>';
-  try { deals = await loadAll(); render(); }
+  try {
+    deals = await loadAll();
+    const created = await syncLeadsToPipeline();
+    if (created > 0) {
+      deals = await loadAll(); // Reload with new records
+      flash(created + ' lead(s) nuevo(s) agregado(s) al pipeline');
+    }
+    render();
+  }
   catch(e) { document.getElementById('K').innerHTML = '<div class="loading" style="color:var(--color-error)">Error: '+e.message+'</div>'; }
 }
 
