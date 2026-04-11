@@ -142,21 +142,21 @@ body { font-family: var(--font-body); background: var(--neutral-100); color: var
     </div>
     <div class="modal-body">
       <div class="msec">
-        <div class="msec-t">Lead (solo lectura)</div>
+        <div class="msec-t">Contacto</div>
         <div class="mrow">
           <div class="mf"><label>Nombre</label><input id="mNom" readonly></div>
-          <div class="mf"><label>Telefono</label><input id="mTel" readonly></div>
+          <div class="mf"><label>Folio</label><input id="mFol" readonly></div>
         </div>
         <div class="mrow">
-          <div class="mf"><label>Email</label><input id="mEml" readonly></div>
-          <div class="mf"><label>Folio</label><input id="mFol" readonly></div>
+          <div class="mf"><label>Telefono</label><input id="mTel" readonly> <div class="hint"><a id="mTelLink" href="#" style="color:var(--color-accent);text-decoration:none;font-size:11px;">Llamar</a> &middot; <a id="mWaLink" href="#" target="_blank" style="color:#25D366;text-decoration:none;font-size:11px;">WhatsApp</a></div></div>
+          <div class="mf"><label>Email</label><input id="mEml" readonly> <div class="hint"><a id="mEmlLink" href="#" style="color:var(--color-accent);text-decoration:none;font-size:11px;">Enviar correo</a></div></div>
         </div>
       </div>
       <div class="msec">
         <div class="msec-t">Oportunidad</div>
         <div class="mrow">
           <div class="mf"><label>Vehiculo</label><input id="mVeh"><div class="hint">Editable si el cliente cambia de auto en piso</div></div>
-          <div class="mf"><label>Valor Pipeline</label><input id="mVal" type="number"><div class="hint">Se actualiza si cambia vehiculo</div></div>
+          <div class="mf"><label>Valor Oportunidad</label><input id="mVal" type="number"><div class="hint">Precio del vehiculo</div></div>
         </div>
         <div class="mrow">
           <div class="mf">
@@ -289,12 +289,14 @@ function render() {
           return `<div class="card" draggable="true" data-id="${d.id}" data-s="${s}"
                     ondragstart="ds(event)" onclick="om('${d.id}')">
             <div class="card-name">${f.OPORTUNIDAD||'Sin nombre'}</div>
-            <div class="card-vehicle">${f.VENDEDOR ? f.VENDEDOR : ''}</div>
+            <div class="card-vehicle">${f.VEHICULO||''}</div>
+            <div style="font-size:11px;color:var(--neutral-500);margin-bottom:4px;">${f.TELEFONO?'<a href="tel:'+f.TELEFONO+'" style="color:var(--color-accent);text-decoration:none;">'+f.TELEFONO+'</a>':''} ${f.EMAIL?'&middot; '+f.EMAIL:''}</div>
             <div class="card-row">
               <div class="card-price">${fmt(f['VALOR PIPELINE'])}</div>
               <div class="card-vendor">${f['VENDEDOR ASIGNADO']||''}</div>
             </div>
-            ${s==='Ganada'&&f['VALOR CIERRE']?`<div class="card-folio">Cierre: ${fmt(f['VALOR CIERRE'])}</div>`:''}
+            ${f.FOLIO?`<div class="card-folio">${f.FOLIO}</div>`:''}
+            ${s==='Ganada'&&f['VALOR CIERRE']?`<div class="card-folio" style="color:var(--color-success)">Cierre: ${fmt(f['VALOR CIERRE'])}</div>`:''}
           </div>`;
         }).join('');
 
@@ -367,10 +369,15 @@ function om(id) {
   const f = d.fields;
   document.getElementById('mTitle').textContent = f.OPORTUNIDAD||'Deal';
   document.getElementById('mNom').value = f.OPORTUNIDAD||'';
-  document.getElementById('mTel').value = '';
-  document.getElementById('mEml').value = '';
-  document.getElementById('mFol').value = '';
-  document.getElementById('mVeh').value = f.OPORTUNIDAD||'';
+  document.getElementById('mTel').value = f.TELEFONO||'';
+  document.getElementById('mEml').value = f.EMAIL||'';
+  document.getElementById('mFol').value = f.FOLIO||'';
+  document.getElementById('mVeh').value = f.VEHICULO||'';
+  // Contact links
+  const tel = (f.TELEFONO||'').replace(/[^0-9+]/g,'');
+  document.getElementById('mTelLink').href = tel ? 'tel:'+tel : '#';
+  document.getElementById('mWaLink').href = tel ? 'https://wa.me/'+tel.replace('+','') : '#';
+  document.getElementById('mEmlLink').href = f.EMAIL ? 'mailto:'+f.EMAIL : '#';
   document.getElementById('mVal').value = f['VALOR PIPELINE']||'';
   document.getElementById('mVend').value = f['VENDEDOR ASIGNADO']||'';
   document.getElementById('mVin').value = f['VIN FACTURADO']||'';
@@ -412,7 +419,7 @@ async function save() {
     'MOTIVO PERDIDA': document.getElementById('mMot').value||null,
     NOTAS: document.getElementById('mNot').value,
     'VALOR PIPELINE': parseFloat(document.getElementById('mVal').value)||null,
-    OPORTUNIDAD: document.getElementById('mVeh').value
+    VEHICULO: document.getElementById('mVeh').value
   };
 
   // Timestamps
