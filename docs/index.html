@@ -7,498 +7,463 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@600;700;800&display=swap" rel="stylesheet">
 <style>
 :root {
-  --gp-black: #1A1A1A;
-  --color-primary: #1E2740;
-  --color-primary-light: #2D3748;
-  --color-accent: #4299E1;
-  --color-accent-hover: #3182CE;
-  --color-success: #48BB78;
-  --color-warning: #D69E2E;
-  --color-error: #E53E3E;
-  --neutral-50: #F7FAFC;
-  --neutral-100: #EDF2F7;
-  --neutral-200: #E2E8F0;
-  --neutral-300: #CBD5E0;
-  --neutral-400: #A0AEC0;
-  --neutral-500: #718096;
-  --neutral-600: #4A5568;
-  --neutral-700: #2D3748;
-  --neutral-800: #1A202C;
-  --font-display: 'Montserrat', sans-serif;
-  --font-body: 'Inter', sans-serif;
-  --radius-sm: 4px;
-  --radius-md: 8px;
-  --radius-lg: 12px;
-  --shadow-sm: 0 1px 3px rgba(0,0,0,0.1);
-  --shadow-md: 0 4px 6px rgba(0,0,0,0.1);
-  --shadow-lg: 0 10px 15px rgba(0,0,0,0.1);
+  --gp-black: #1A1A1A; --color-primary: #1E2740; --color-primary-light: #2D3748;
+  --color-accent: #4299E1; --color-accent-hover: #3182CE;
+  --color-success: #48BB78; --color-warning: #D69E2E; --color-error: #E53E3E;
+  --neutral-50: #F7FAFC; --neutral-100: #EDF2F7; --neutral-200: #E2E8F0;
+  --neutral-300: #CBD5E0; --neutral-400: #A0AEC0; --neutral-500: #718096;
+  --neutral-600: #4A5568; --neutral-700: #2D3748; --neutral-800: #1A202C;
+  --font-display: 'Montserrat', sans-serif; --font-body: 'Inter', sans-serif;
+  --radius-sm: 4px; --radius-md: 8px; --radius-lg: 12px;
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.1); --shadow-md: 0 4px 6px rgba(0,0,0,0.1); --shadow-lg: 0 10px 15px rgba(0,0,0,0.1);
 }
 * { margin:0; padding:0; box-sizing:border-box; }
-body { font-family: var(--font-body); background: var(--neutral-100); color: var(--gp-black); font-size: 14px; }
+body { font-family: var(--font-body); background: var(--neutral-100); color: var(--gp-black); font-size: 14px; overflow: hidden; height: 100vh; display: flex; flex-direction: column; }
 
 /* ── HEADER ── */
-.header { background: var(--color-primary); color: #F7FAFC; padding: 0 24px; height: 56px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; }
-.header-title { font-family: var(--font-display); font-weight: 700; font-size: 16px; letter-spacing: 0.5px; }
-.header-subtitle { font-size: 11px; color: var(--neutral-400); margin-left: 12px; }
-.header-right { display: flex; align-items: center; gap: 16px; }
-.header-stats { display: flex; gap: 20px; }
-.header-stat { text-align: center; }
-.header-stat-num { font-family: var(--font-display); font-weight: 700; font-size: 18px; }
-.header-stat-label { font-size: 10px; color: var(--neutral-400); text-transform: uppercase; letter-spacing: 0.5px; }
+.header { background: var(--color-primary); color: #F7FAFC; padding: 0 24px; height: 52px; display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; }
+.header-left { display: flex; align-items: center; gap: 12px; }
+.header-title { font-family: var(--font-display); font-weight: 700; font-size: 15px; }
+.header-stats { display: flex; gap: 24px; }
+.stat { text-align: center; }
+.stat-num { font-family: var(--font-display); font-weight: 700; font-size: 16px; }
+.stat-label { font-size: 9px; color: var(--neutral-400); text-transform: uppercase; letter-spacing: 0.5px; }
 
 /* ── TABS ── */
-.tabs { background: var(--neutral-800); display: flex; padding: 0 24px; gap: 0; border-bottom: 1px solid rgba(255,255,255,0.1); }
-.tab { padding: 12px 24px; color: var(--neutral-400); font-size: 13px; font-weight: 600; cursor: pointer; border-bottom: 2px solid transparent; transition: all 0.2s; }
+.tabs { background: var(--neutral-800); display: flex; padding: 0 24px; flex-shrink: 0; }
+.tab { padding: 10px 20px; color: var(--neutral-400); font-size: 12px; font-weight: 600; cursor: pointer; border-bottom: 2px solid transparent; transition: all 0.15s; }
 .tab:hover { color: #F7FAFC; }
 .tab.active { color: #F7FAFC; border-bottom-color: var(--color-accent); }
 
 /* ── TOOLBAR ── */
-.toolbar { padding: 12px 24px; display: flex; align-items: center; gap: 12px; background: #fff; border-bottom: 1px solid var(--neutral-200); }
-.toolbar-search { padding: 8px 12px; border: 1px solid var(--neutral-300); border-radius: var(--radius-md); font-size: 13px; width: 240px; font-family: var(--font-body); }
-.toolbar-search:focus { outline: none; border-color: var(--color-accent); box-shadow: 0 0 0 3px rgba(66,153,225,0.15); }
-.toolbar-btn { padding: 8px 16px; border-radius: var(--radius-md); font-size: 13px; font-weight: 600; cursor: pointer; border: 1px solid var(--neutral-300); background: #fff; color: var(--neutral-700); transition: all 0.15s; }
+.toolbar { padding: 10px 24px; display: flex; align-items: center; gap: 10px; background: #fff; border-bottom: 1px solid var(--neutral-200); flex-shrink: 0; }
+.toolbar input { padding: 7px 12px; border: 1px solid var(--neutral-300); border-radius: var(--radius-md); font-size: 13px; width: 220px; font-family: var(--font-body); }
+.toolbar input:focus { outline: none; border-color: var(--color-accent); }
+.toolbar-btn { padding: 7px 14px; border-radius: var(--radius-md); font-size: 12px; font-weight: 600; cursor: pointer; border: 1px solid var(--neutral-300); background: #fff; color: var(--neutral-700); }
 .toolbar-btn:hover { background: var(--neutral-50); }
-.toolbar-btn.primary { background: var(--color-accent); color: #fff; border-color: var(--color-accent); }
-.toolbar-btn.primary:hover { background: var(--color-accent-hover); }
-.toolbar-total { margin-left: auto; font-size: 13px; color: var(--neutral-500); }
-.toolbar-total strong { color: var(--gp-black); font-weight: 700; }
+.toolbar-right { margin-left: auto; font-size: 12px; color: var(--neutral-500); }
+.toolbar-right strong { color: var(--gp-black); }
 
 /* ── KANBAN ── */
-.kanban { display: flex; gap: 12px; padding: 16px 24px; overflow-x: auto; min-height: calc(100vh - 160px); align-items: flex-start; }
-.kanban-col { min-width: 280px; max-width: 320px; flex: 1; background: var(--neutral-100); border-radius: var(--radius-lg); display: flex; flex-direction: column; }
-.kanban-col-header { padding: 12px 16px; display: flex; align-items: center; justify-content: space-between; border-bottom: 2px solid transparent; }
-.kanban-col-header .label { font-weight: 700; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; display: flex; align-items: center; gap: 8px; }
-.kanban-col-header .count { background: var(--neutral-300); color: var(--neutral-700); font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: var(--radius-full, 9999px); }
-.kanban-col-header .value { font-size: 12px; font-weight: 600; color: var(--neutral-500); }
-.kanban-col[data-stage="SQL"] .kanban-col-header { border-bottom-color: var(--color-accent); }
-.kanban-col[data-stage="Cita Agendada"] .kanban-col-header { border-bottom-color: #0BC5EA; }
-.kanban-col[data-stage="Visita Realizada"] .kanban-col-header { border-bottom-color: #38B2AC; }
-.kanban-col[data-stage="Negociacion"] .kanban-col-header { border-bottom-color: var(--color-warning); }
-.kanban-col[data-stage="Ganada"] .kanban-col-header { border-bottom-color: var(--color-success); }
-.kanban-col[data-stage="Perdida"] .kanban-col-header { border-bottom-color: var(--color-error); }
-.kanban-col-cards { padding: 8px; flex: 1; min-height: 100px; display: flex; flex-direction: column; gap: 8px; }
-.kanban-col-cards.drag-over { background: rgba(66,153,225,0.08); border-radius: var(--radius-md); }
+.kanban { display: flex; gap: 10px; padding: 12px 24px; flex: 1; overflow-x: auto; overflow-y: hidden; align-items: flex-start; }
+.kcol { min-width: 260px; width: 260px; flex-shrink: 0; background: var(--neutral-100); border-radius: var(--radius-lg); display: flex; flex-direction: column; max-height: 100%; }
+.kcol-head { padding: 10px 14px; display: flex; align-items: center; justify-content: space-between; border-bottom: 3px solid var(--neutral-300); flex-shrink: 0; }
+.kcol-head .lbl { font-weight: 700; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; display: flex; align-items: center; gap: 6px; }
+.kcol-head .cnt { background: var(--neutral-300); color: var(--neutral-700); font-size: 10px; font-weight: 700; padding: 1px 7px; border-radius: 99px; }
+.kcol-head .val { font-size: 11px; font-weight: 600; color: var(--neutral-500); }
+.kcol[data-s="SQL"] .kcol-head { border-bottom-color: var(--color-accent); }
+.kcol[data-s="Cita Agendada"] .kcol-head { border-bottom-color: #0BC5EA; }
+.kcol[data-s="Visita Realizada"] .kcol-head { border-bottom-color: #38B2AC; }
+.kcol[data-s="Negociacion"] .kcol-head { border-bottom-color: var(--color-warning); }
+.kcol[data-s="Ganada"] .kcol-head { border-bottom-color: var(--color-success); }
+.kcol[data-s="Perdida"] .kcol-head { border-bottom-color: var(--color-error); }
+.kcol-body { padding: 6px; flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 6px; min-height: 60px; }
+.kcol-body.over { background: rgba(66,153,225,0.08); border-radius: var(--radius-md); }
 
-/* ── DEAL CARD ── */
-.deal-card { background: #fff; border-radius: var(--radius-md); padding: 14px 16px; box-shadow: var(--shadow-sm); cursor: grab; transition: box-shadow 0.15s, transform 0.15s; border-left: 3px solid transparent; }
-.deal-card:hover { box-shadow: var(--shadow-md); transform: translateY(-1px); }
-.deal-card.dragging { opacity: 0.5; transform: rotate(2deg); }
-.deal-card-name { font-weight: 700; font-size: 13px; color: var(--gp-black); margin-bottom: 4px; }
-.deal-card-vehicle { font-size: 12px; color: var(--neutral-500); margin-bottom: 8px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.deal-card-footer { display: flex; align-items: center; justify-content: space-between; }
-.deal-card-price { font-family: var(--font-display); font-weight: 700; font-size: 14px; color: var(--color-primary); }
-.deal-card-date { font-size: 11px; color: var(--neutral-400); }
-.deal-card-folio { font-size: 10px; color: var(--neutral-400); font-family: monospace; }
-.deal-card[data-stage="Ganada"] { border-left-color: var(--color-success); }
-.deal-card[data-stage="Perdida"] { border-left-color: var(--color-error); opacity: 0.6; }
+/* ── CARD ── */
+.card { background: #fff; border-radius: var(--radius-md); padding: 12px 14px; box-shadow: var(--shadow-sm); cursor: grab; transition: all 0.12s; border-left: 3px solid transparent; }
+.card:hover { box-shadow: var(--shadow-md); transform: translateY(-1px); }
+.card.dragging { opacity: 0.4; }
+.card-name { font-weight: 700; font-size: 13px; margin-bottom: 2px; }
+.card-vehicle { font-size: 11px; color: var(--neutral-500); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 6px; }
+.card-row { display: flex; justify-content: space-between; align-items: center; }
+.card-price { font-family: var(--font-display); font-weight: 700; font-size: 13px; color: var(--color-primary); }
+.card-vendor { font-size: 10px; color: var(--neutral-400); max-width: 100px; overflow: hidden; text-overflow: ellipsis; }
+.card-folio { font-size: 9px; color: var(--neutral-400); font-family: monospace; margin-top: 4px; }
+.card[data-s="Ganada"] { border-left-color: var(--color-success); background: #F0FFF4; }
+.card[data-s="Perdida"] { border-left-color: var(--color-error); opacity: 0.55; }
+.empty-col { text-align: center; padding: 20px 10px; color: var(--neutral-400); font-size: 11px; }
 
 /* ── MODAL ── */
-.modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 200; align-items: center; justify-content: center; }
-.modal-overlay.open { display: flex; }
-.modal { background: #fff; border-radius: var(--radius-lg); width: 560px; max-width: 95vw; max-height: 90vh; overflow-y: auto; box-shadow: var(--shadow-lg); }
-.modal-header { padding: 20px 24px 16px; border-bottom: 1px solid var(--neutral-200); display: flex; justify-content: space-between; align-items: flex-start; }
-.modal-header h2 { font-family: var(--font-display); font-weight: 700; font-size: 18px; }
-.modal-close { background: none; border: none; font-size: 20px; cursor: pointer; color: var(--neutral-400); padding: 4px 8px; }
-.modal-close:hover { color: var(--gp-black); }
-.modal-body { padding: 20px 24px; }
-.modal-section { margin-bottom: 20px; }
-.modal-section-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--neutral-500); margin-bottom: 8px; }
-.modal-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
-.modal-field label { display: block; font-size: 12px; font-weight: 600; color: var(--neutral-600); margin-bottom: 4px; }
-.modal-field input, .modal-field select, .modal-field textarea { width: 100%; padding: 8px 12px; border: 1px solid var(--neutral-300); border-radius: var(--radius-sm); font-size: 13px; font-family: var(--font-body); }
-.modal-field input:focus, .modal-field select:focus, .modal-field textarea:focus { outline: none; border-color: var(--color-accent); box-shadow: 0 0 0 3px rgba(66,153,225,0.15); }
-.modal-field input[readonly] { background: var(--neutral-50); color: var(--neutral-500); }
-.modal-footer { padding: 16px 24px; border-top: 1px solid var(--neutral-200); display: flex; justify-content: flex-end; gap: 8px; }
-.btn { padding: 10px 20px; border-radius: var(--radius-md); font-size: 13px; font-weight: 600; cursor: pointer; border: none; transition: all 0.15s; }
-.btn-primary { background: var(--color-accent); color: #fff; }
-.btn-primary:hover { background: var(--color-accent-hover); }
-.btn-cancel { background: var(--neutral-100); color: var(--neutral-700); }
-.btn-cancel:hover { background: var(--neutral-200); }
-.btn-danger { background: var(--color-error); color: #fff; }
-.btn-danger:hover { background: #C53030; }
-.btn-success { background: var(--color-success); color: #fff; }
-.btn-success:hover { background: #38A169; }
-
-/* ── LOADING ── */
-.loading { text-align: center; padding: 60px 20px; color: var(--neutral-500); }
-.loading-spinner { width: 32px; height: 32px; border: 3px solid var(--neutral-200); border-top-color: var(--color-accent); border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 12px; }
-@keyframes spin { to { transform: rotate(360deg); } }
-
-/* ── EMPTY ── */
-.empty-col { text-align: center; padding: 24px 12px; color: var(--neutral-400); font-size: 12px; }
-
-/* ── RESPONSIVE ── */
-@media(max-width:768px) {
-  .kanban { padding: 8px; gap: 8px; }
-  .kanban-col { min-width: 260px; }
-  .header-stats { display: none; }
-  .toolbar-search { width: 160px; }
-}
+.overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:200; align-items:center; justify-content:center; }
+.overlay.open { display:flex; }
+.modal { background:#fff; border-radius:var(--radius-lg); width:580px; max-width:95vw; max-height:90vh; overflow-y:auto; }
+.modal-head { padding:18px 22px 14px; border-bottom:1px solid var(--neutral-200); display:flex; justify-content:space-between; align-items:center; }
+.modal-head h2 { font-family:var(--font-display); font-weight:700; font-size:16px; }
+.modal-x { background:none; border:none; font-size:18px; cursor:pointer; color:var(--neutral-400); padding:4px 8px; }
+.modal-x:hover { color:var(--gp-black); }
+.modal-body { padding:18px 22px; }
+.msec { margin-bottom:16px; }
+.msec-t { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; color:var(--neutral-500); margin-bottom:6px; }
+.mrow { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:10px; }
+.mf label { display:block; font-size:11px; font-weight:600; color:var(--neutral-600); margin-bottom:3px; }
+.mf input,.mf select,.mf textarea { width:100%; padding:7px 10px; border:1px solid var(--neutral-300); border-radius:var(--radius-sm); font-size:12px; font-family:var(--font-body); }
+.mf input:focus,.mf select:focus,.mf textarea:focus { outline:none; border-color:var(--color-accent); }
+.mf input[readonly] { background:var(--neutral-50); color:var(--neutral-500); cursor:default; }
+.mf .hint { font-size:10px; color:var(--neutral-400); margin-top:2px; }
+.modal-foot { padding:14px 22px; border-top:1px solid var(--neutral-200); display:flex; justify-content:flex-end; gap:8px; }
+.btn { padding:8px 18px; border-radius:var(--radius-md); font-size:12px; font-weight:600; cursor:pointer; border:none; }
+.btn-primary { background:var(--color-accent); color:#fff; }
+.btn-primary:hover { background:var(--color-accent-hover); }
+.btn-cancel { background:var(--neutral-100); color:var(--neutral-700); }
+.btn-save-status { position:fixed; bottom:16px; left:50%; transform:translateX(-50%); background:var(--color-success); color:#fff; padding:8px 20px; border-radius:var(--radius-md); font-size:12px; font-weight:600; box-shadow:var(--shadow-lg); display:none; z-index:300; animation: fadeIn 0.2s; }
+@keyframes fadeIn { from{opacity:0;transform:translateX(-50%) translateY(8px)} to{opacity:1;transform:translateX(-50%) translateY(0)} }
+.loading { text-align:center; padding:40px; color:var(--neutral-500); width:100%; }
+.spinner { width:28px; height:28px; border:3px solid var(--neutral-200); border-top-color:var(--color-accent); border-radius:50%; animation:spin 0.7s linear infinite; margin:0 auto 10px; }
+@keyframes spin { to{transform:rotate(360deg)} }
 </style>
 </head>
 <body>
 
-<!-- ════ HEADER ════ -->
 <header class="header">
-  <div style="display:flex;align-items:center;">
+  <div class="header-left">
     <span class="header-title">Pipeline CRM</span>
-    <span class="header-subtitle">Grupo Plasencia</span>
   </div>
-  <div class="header-right">
-    <div class="header-stats">
-      <div class="header-stat">
-        <div class="header-stat-num" id="statDeals">-</div>
-        <div class="header-stat-label">Deals</div>
-      </div>
-      <div class="header-stat">
-        <div class="header-stat-num" id="statPipeline">-</div>
-        <div class="header-stat-label">Pipeline</div>
-      </div>
-      <div class="header-stat">
-        <div class="header-stat-num" id="statWon">-</div>
-        <div class="header-stat-label">Ganadas</div>
-      </div>
-    </div>
+  <div class="header-stats">
+    <div class="stat"><div class="stat-num" id="sDeals">-</div><div class="stat-label">Deals</div></div>
+    <div class="stat"><div class="stat-num" id="sPipe">-</div><div class="stat-label">Pipeline</div></div>
+    <div class="stat"><div class="stat-num" id="sWon">-</div><div class="stat-label">Ganadas</div></div>
+    <div class="stat"><div class="stat-num" id="sLost">-</div><div class="stat-label">Perdidas</div></div>
   </div>
 </header>
 
-<!-- ════ TABS ════ -->
 <nav class="tabs">
-  <div class="tab active" data-brand="hyundai" onclick="switchBrand('hyundai')">Hyundai</div>
-  <div class="tab" data-brand="stellantis" onclick="switchBrand('stellantis')">Stellantis</div>
-  <div class="tab" data-brand="seminuevos" onclick="switchBrand('seminuevos')">Seminuevos</div>
+  <div class="tab active" data-b="hyundai" onclick="sw('hyundai')">Hyundai</div>
+  <div class="tab" data-b="stellantis" onclick="sw('stellantis')">Stellantis</div>
+  <div class="tab" data-b="seminuevos" onclick="sw('seminuevos')">Seminuevos</div>
 </nav>
 
-<!-- ════ TOOLBAR ════ -->
 <div class="toolbar">
-  <input class="toolbar-search" type="text" placeholder="Buscar por nombre, folio o vehiculo..." oninput="filterDeals(this.value)">
-  <button class="toolbar-btn" onclick="refreshData()">Actualizar</button>
-  <div class="toolbar-total">Pipeline total: <strong id="pipelineTotal">$0</strong></div>
+  <input type="text" placeholder="Buscar nombre, folio, vehiculo..." oninput="filter(this.value)">
+  <button class="toolbar-btn" onclick="refresh()">Actualizar</button>
+  <div class="toolbar-right">Pipeline: <strong id="tPipe">$0</strong></div>
 </div>
 
-<!-- ════ KANBAN ════ -->
-<div class="kanban" id="kanban">
-  <div class="loading"><div class="loading-spinner"></div>Cargando pipeline...</div>
-</div>
+<div class="kanban" id="K"></div>
 
-<!-- ════ DEAL MODAL ════ -->
-<div class="modal-overlay" id="dealModal">
+<div class="btn-save-status" id="saveStatus">Guardado</div>
+
+<!-- MODAL -->
+<div class="overlay" id="OV">
   <div class="modal">
-    <div class="modal-header">
-      <h2 id="modalTitle">Deal</h2>
-      <button class="modal-close" onclick="closeModal()">&times;</button>
+    <div class="modal-head">
+      <h2 id="mTitle">Deal</h2>
+      <button class="modal-x" onclick="cm()">&times;</button>
     </div>
     <div class="modal-body">
-      <div class="modal-section">
-        <div class="modal-section-title">Informacion del Lead</div>
-        <div class="modal-row">
-          <div class="modal-field"><label>Nombre</label><input id="mNombre" readonly></div>
-          <div class="modal-field"><label>Telefono</label><input id="mTelefono" readonly></div>
+      <div class="msec">
+        <div class="msec-t">Lead (solo lectura)</div>
+        <div class="mrow">
+          <div class="mf"><label>Nombre</label><input id="mNom" readonly></div>
+          <div class="mf"><label>Telefono</label><input id="mTel" readonly></div>
         </div>
-        <div class="modal-row">
-          <div class="modal-field"><label>Email</label><input id="mEmail" readonly></div>
-          <div class="modal-field"><label>Folio</label><input id="mFolio" readonly></div>
-        </div>
-        <div class="modal-row">
-          <div class="modal-field"><label>Vehiculo</label><input id="mVehiculo" readonly></div>
-          <div class="modal-field"><label>Valor Pipeline</label><input id="mValorPipeline" readonly></div>
+        <div class="mrow">
+          <div class="mf"><label>Email</label><input id="mEml" readonly></div>
+          <div class="mf"><label>Folio</label><input id="mFol" readonly></div>
         </div>
       </div>
-      <div class="modal-section">
-        <div class="modal-section-title">Gestion del Deal</div>
-        <div class="modal-row">
-          <div class="modal-field">
+      <div class="msec">
+        <div class="msec-t">Oportunidad</div>
+        <div class="mrow">
+          <div class="mf"><label>Vehiculo</label><input id="mVeh"><div class="hint">Editable si el cliente cambia de auto en piso</div></div>
+          <div class="mf"><label>Valor Pipeline</label><input id="mVal" type="number"><div class="hint">Se actualiza si cambia vehiculo</div></div>
+        </div>
+        <div class="mrow">
+          <div class="mf">
             <label>Etapa</label>
-            <select id="mEtapa">
-              <option>SQL</option>
-              <option>Cita Agendada</option>
-              <option>Visita Realizada</option>
-              <option>Negociacion</option>
-              <option>Ganada</option>
-              <option>Perdida</option>
-            </select>
+            <select id="mEta" onchange="onStageChange()"></select>
           </div>
-          <div class="modal-field"><label>Vendedor</label><input id="mVendedor"></div>
+          <div class="mf"><label>Vendedor Asignado</label><input id="mVend" placeholder="Tu nombre"></div>
         </div>
-        <div class="modal-row">
-          <div class="modal-field"><label>VIN Facturado</label><input id="mVin" placeholder="Al cerrar la venta"></div>
-          <div class="modal-field"><label>Valor Cierre</label><input id="mValorCierre" type="number" placeholder="Monto real"></div>
+      </div>
+      <div class="msec" id="mCierreSection" style="display:none">
+        <div class="msec-t">Cierre</div>
+        <div class="mrow">
+          <div class="mf"><label>VIN Facturado</label><input id="mVin"></div>
+          <div class="mf"><label>Valor Cierre</label><input id="mValC" type="number"></div>
         </div>
-        <div class="modal-row">
-          <div class="modal-field"><label>Fecha Cierre</label><input id="mFechaCierre" type="date"></div>
-          <div class="modal-field">
-            <label>Motivo Perdida</label>
-            <select id="mMotivoPerdida">
+        <div class="mrow">
+          <div class="mf"><label>Fecha Cierre</label><input id="mFecC" type="date"></div>
+          <div class="mf">&nbsp;</div>
+        </div>
+      </div>
+      <div class="msec" id="mPerdidaSection" style="display:none">
+        <div class="msec-t">Motivo de Perdida</div>
+        <div class="mrow">
+          <div class="mf">
+            <label>Motivo</label>
+            <select id="mMot">
               <option value="">—</option>
-              <option>No contesto</option>
-              <option>Precio</option>
-              <option>Financiamiento rechazado</option>
-              <option>Compro en otro lado</option>
-              <option>No le gusto</option>
-              <option>Otro</option>
+              <option>No contesto</option><option>Precio</option><option>Financiamiento rechazado</option>
+              <option>Compro en otro lado</option><option>No le gusto</option><option>Otro</option>
             </select>
           </div>
+          <div class="mf">&nbsp;</div>
         </div>
-        <div class="modal-field" style="margin-top:8px;">
-          <label>Notas</label>
-          <textarea id="mNotas" rows="3" placeholder="Notas del vendedor..."></textarea>
-        </div>
+      </div>
+      <div class="msec">
+        <div class="mf"><label>Notas</label><textarea id="mNot" rows="2" placeholder="Notas..."></textarea></div>
       </div>
     </div>
-    <div class="modal-footer">
-      <button class="btn btn-cancel" onclick="closeModal()">Cancelar</button>
-      <button class="btn btn-primary" onclick="saveDeal()">Guardar</button>
+    <div class="modal-foot">
+      <button class="btn btn-cancel" onclick="cm()">Cancelar</button>
+      <button class="btn btn-primary" onclick="save()">Guardar</button>
     </div>
   </div>
 </div>
 
 <script>
-// ── CONFIG ──
-const CONFIG = {
-  // PAT scoped (solo tablas Pipeline, read+write)
+const C = {
   PAT: 'pat8WqN5x6S8rN8fm.b556575905c1b7eea70528acda9ca7c4052bf9e7b4c53f49706b6a76b64ea0c6',
-  BASE_ID: 'appJarn5S2Xye7Vj5',
-  tables: {
-    hyundai:     { pipeline: 'tblsUz6vcRBAnXLjW', leads: 'tblb9AQC4hTDZBYit', label: 'Hyundai' },
-    stellantis:  { pipeline: 'tblo2JmrsMZGjPnyi', leads: 'tblM1O14lENlRZrGt', label: 'Stellantis' },
-    seminuevos:  { pipeline: 'tblZYMPikUdESZdfO', leads: 'tblPHUStrLOCJtd6m', label: 'Seminuevos' }
+  BASE: 'appJarn5S2Xye7Vj5',
+  T: {
+    hyundai:    { p:'tblsUz6vcRBAnXLjW', l:'tblb9AQC4hTDZBYit' },
+    stellantis: { p:'tblo2JmrsMZGjPnyi', l:'tblM1O14lENlRZrGt' },
+    seminuevos: { p:'tblZYMPikUdESZdfO', l:'tblPHUStrLOCJtd6m' }
   },
-  stages: ['SQL', 'Cita Agendada', 'Visita Realizada', 'Negociacion', 'Ganada', 'Perdida']
+  STAGES: ['SQL','Cita Agendada','Visita Realizada','Negociacion','Ganada','Perdida'],
+  // Stage transition rules: key = current, value = allowed targets
+  RULES: {
+    'SQL': ['Cita Agendada','Perdida'],
+    'Cita Agendada': ['Visita Realizada','Perdida'],
+    'Visita Realizada': ['Negociacion','Perdida'],
+    'Negociacion': ['Visita Realizada','Ganada','Perdida'],
+    'Ganada': [],
+    'Perdida': []
+  }
 };
 
-let currentBrand = 'hyundai';
-let deals = [];
-let currentDealId = null;
-let searchQuery = '';
+let brand = 'hyundai', deals = [], cid = null, q = '';
 
-// ── AIRTABLE API ──
-async function airtableFetch(endpoint, options = {}) {
-  const url = `https://api.airtable.com/v0/${CONFIG.BASE_ID}/${endpoint}`;
-  const res = await fetch(url, {
-    ...options,
-    headers: {
-      'Authorization': `Bearer ${CONFIG.PAT}`,
-      'Content-Type': 'application/json',
-      ...options.headers
-    }
+// ── API ──
+async function api(tbl, opts={}) {
+  const u = `https://api.airtable.com/v0/${C.BASE}/${tbl}` + (opts.path||'');
+  const r = await fetch(u + (opts.qs ? '?'+new URLSearchParams(opts.qs) : ''), {
+    method: opts.method||'GET',
+    headers: { 'Authorization':'Bearer '+C.PAT, 'Content-Type':'application/json' },
+    body: opts.body ? JSON.stringify(opts.body) : undefined
   });
-  return res.json();
+  return r.json();
 }
 
-async function loadDeals() {
-  const table = CONFIG.tables[currentBrand].pipeline;
-  let allRecords = [];
-  let offset = null;
+async function loadAll() {
+  let all=[], off=null;
   do {
-    const params = new URLSearchParams({ pageSize: '100' });
-    if (offset) params.set('offset', offset);
-    const data = await airtableFetch(`${table}?${params}`);
-    allRecords = allRecords.concat(data.records || []);
-    offset = data.offset;
-  } while (offset);
-  return allRecords;
+    const qs = {pageSize:'100'}; if(off) qs.offset=off;
+    const d = await api(C.T[brand].p, {qs});
+    all = all.concat(d.records||[]);
+    off = d.offset;
+  } while(off);
+  return all;
 }
 
-async function updateDeal(recordId, fields) {
-  const table = CONFIG.tables[currentBrand].pipeline;
-  return airtableFetch(table, {
-    method: 'PATCH',
-    body: JSON.stringify({ records: [{ id: recordId, fields }] })
+async function updateRec(id, fields) {
+  return api(C.T[brand].p, { method:'PATCH', body:{records:[{id,fields}]} });
+}
+
+// Also update Leads table for synced fields
+async function syncToLead(leadIds, fields) {
+  if (!leadIds || !leadIds.length) return;
+  const syncFields = {};
+  if (fields['VENDEDOR ASIGNADO'] !== undefined) syncFields['VENDEDOR ASIGNADO'] = fields['VENDEDOR ASIGNADO'];
+  if (Object.keys(syncFields).length === 0) return;
+  return api(C.T[brand].l, {
+    method:'PATCH',
+    body:{records: leadIds.map(id => ({id, fields: syncFields}))}
   });
 }
 
 // ── RENDER ──
-function fmt(n) { return '$' + (n || 0).toLocaleString('es-MX'); }
+const fmt = n => '$'+(n||0).toLocaleString('es-MX');
 
-function renderKanban() {
-  const kanban = document.getElementById('kanban');
-  const filtered = searchQuery
-    ? deals.filter(d => {
-        const f = d.fields;
-        const txt = `${f.OPORTUNIDAD || ''} ${f.VENDEDOR || ''} ${f['VIN FACTURADO'] || ''}`.toLowerCase();
-        return txt.includes(searchQuery.toLowerCase());
-      })
-    : deals;
+function render() {
+  const K = document.getElementById('K');
+  const filt = q ? deals.filter(d => {
+    const f=d.fields, t=`${f.OPORTUNIDAD||''} ${f['VENDEDOR ASIGNADO']||''} ${f['VIN FACTURADO']||''}`.toLowerCase();
+    return t.includes(q.toLowerCase());
+  }) : deals;
 
-  let totalPipeline = 0;
-  let totalWon = 0;
-  let totalDeals = filtered.length;
+  let pipe=0, won=0, lost=0;
 
-  const cols = CONFIG.stages.map(stage => {
-    const stageDeals = filtered.filter(d => (d.fields.ETAPA || 'SQL') === stage);
-    const stageValue = stageDeals.reduce((s, d) => s + (d.fields['VALOR PIPELINE'] || 0), 0);
+  K.innerHTML = C.STAGES.map(s => {
+    const sd = filt.filter(d => (d.fields.ETAPA||'SQL')===s);
+    const sv = sd.reduce((a,d) => a+(d.fields['VALOR PIPELINE']||0), 0);
+    if(s!=='Perdida') pipe+=sv;
+    if(s==='Ganada') won=sd.reduce((a,d)=>a+(d.fields['VALOR CIERRE']||d.fields['VALOR PIPELINE']||0),0);
+    if(s==='Perdida') lost=sd.reduce((a,d)=>a+(d.fields['VALOR PIPELINE']||0),0);
 
-    if (stage !== 'Perdida') totalPipeline += stageValue;
-    if (stage === 'Ganada') totalWon = stageDeals.reduce((s, d) => s + (d.fields['VALOR CIERRE'] || d.fields['VALOR PIPELINE'] || 0), 0);
-
-    const cards = stageDeals.length === 0
+    const cards = sd.length===0
       ? '<div class="empty-col">Sin deals</div>'
-      : stageDeals.map(d => {
-          const f = d.fields;
-          return `<div class="deal-card" draggable="true" data-id="${d.id}" data-stage="${stage}"
-                    ondragstart="dragStart(event)" onclick="openDeal('${d.id}')">
-            <div class="deal-card-name">${f.OPORTUNIDAD || 'Sin nombre'}</div>
-            <div class="deal-card-vehicle">${f.VENDEDOR ? '👤 ' + f.VENDEDOR : ''}</div>
-            <div class="deal-card-footer">
-              <div class="deal-card-price">${fmt(f['VALOR PIPELINE'])}</div>
-              <div class="deal-card-folio">${stage === 'Ganada' && f['VALOR CIERRE'] ? 'Cierre: ' + fmt(f['VALOR CIERRE']) : ''}</div>
+      : sd.map(d => {
+          const f=d.fields;
+          return `<div class="card" draggable="true" data-id="${d.id}" data-s="${s}"
+                    ondragstart="ds(event)" onclick="om('${d.id}')">
+            <div class="card-name">${f.OPORTUNIDAD||'Sin nombre'}</div>
+            <div class="card-vehicle">${f.VENDEDOR ? f.VENDEDOR : ''}</div>
+            <div class="card-row">
+              <div class="card-price">${fmt(f['VALOR PIPELINE'])}</div>
+              <div class="card-vendor">${f['VENDEDOR ASIGNADO']||''}</div>
             </div>
+            ${s==='Ganada'&&f['VALOR CIERRE']?`<div class="card-folio">Cierre: ${fmt(f['VALOR CIERRE'])}</div>`:''}
           </div>`;
         }).join('');
 
-    return `<div class="kanban-col" data-stage="${stage}"
-              ondragover="dragOver(event)" ondragleave="dragLeave(event)" ondrop="drop(event)">
-      <div class="kanban-col-header">
-        <div class="label"><span>${stage}</span> <span class="count">${stageDeals.length}</span></div>
-        <div class="value">${fmt(stageValue)}</div>
+    // Determine if this column accepts drops
+    const droppable = s!=='Ganada' && s!=='Perdida' ? 'true' : 'true';
+
+    return `<div class="kcol" data-s="${s}" ondragover="dov(event)" ondragleave="dlv(event)" ondrop="drp(event)">
+      <div class="kcol-head">
+        <div class="lbl">${s} <span class="cnt">${sd.length}</span></div>
+        <div class="val">${fmt(sv)}</div>
       </div>
-      <div class="kanban-col-cards">${cards}</div>
+      <div class="kcol-body">${cards}</div>
     </div>`;
   }).join('');
 
-  kanban.innerHTML = cols;
-
-  document.getElementById('statDeals').textContent = totalDeals;
-  document.getElementById('statPipeline').textContent = fmt(totalPipeline);
-  document.getElementById('statWon').textContent = fmt(totalWon);
-  document.getElementById('pipelineTotal').textContent = fmt(totalPipeline);
+  document.getElementById('sDeals').textContent = filt.length;
+  document.getElementById('sPipe').textContent = fmt(pipe);
+  document.getElementById('sWon').textContent = fmt(won);
+  document.getElementById('sLost').textContent = fmt(lost);
+  document.getElementById('tPipe').textContent = fmt(pipe);
 }
 
 // ── DRAG & DROP ──
-let draggedId = null;
+let did = null;
+function ds(e) { did=e.target.dataset.id; e.target.classList.add('dragging'); e.dataTransfer.effectAllowed='move'; }
+function dov(e) { e.preventDefault(); e.currentTarget.querySelector('.kcol-body').classList.add('over'); }
+function dlv(e) { e.currentTarget.querySelector('.kcol-body').classList.remove('over'); }
 
-function dragStart(e) {
-  draggedId = e.target.dataset.id;
-  e.target.classList.add('dragging');
-  e.dataTransfer.effectAllowed = 'move';
-}
-
-function dragOver(e) {
+async function drp(e) {
   e.preventDefault();
-  e.currentTarget.querySelector('.kanban-col-cards').classList.add('drag-over');
-}
+  e.currentTarget.querySelector('.kcol-body').classList.remove('over');
+  const ns = e.currentTarget.dataset.s;
+  if(!did||!ns) return;
+  const deal = deals.find(d=>d.id===did);
+  if(!deal) return;
+  const cs = deal.fields.ETAPA||'SQL';
 
-function dragLeave(e) {
-  e.currentTarget.querySelector('.kanban-col-cards').classList.remove('drag-over');
-}
-
-async function drop(e) {
-  e.preventDefault();
-  e.currentTarget.querySelector('.kanban-col-cards').classList.remove('drag-over');
-  const newStage = e.currentTarget.dataset.stage;
-  if (!draggedId || !newStage) return;
-
-  // Update locally first (optimistic)
-  const deal = deals.find(d => d.id === draggedId);
-  if (deal) {
-    deal.fields.ETAPA = newStage;
-    renderKanban();
+  // Check rules
+  const allowed = C.RULES[cs]||[];
+  if(!allowed.includes(ns)) {
+    flash('No se puede mover de '+cs+' a '+ns, true);
+    did=null; return;
   }
 
-  // Then update Airtable
-  try {
-    await updateDeal(draggedId, { ETAPA: newStage });
-  } catch(err) {
-    console.error('Error updating stage:', err);
-    await refreshData();
+  // Optimistic update
+  deal.fields.ETAPA = ns;
+  const fields = { ETAPA: ns };
+
+  // Timestamps
+  if(ns==='Visita Realizada' && !deal.fields.FECHA_VISITA) {
+    fields.FECHA_VISITA = new Date().toISOString();
+    deal.fields.FECHA_VISITA = fields.FECHA_VISITA;
   }
-  draggedId = null;
+  if(ns==='Ganada' && !deal.fields['FECHA CIERRE']) {
+    fields['FECHA CIERRE'] = new Date().toISOString().split('T')[0];
+    deal.fields['FECHA CIERRE'] = fields['FECHA CIERRE'];
+  }
+
+  render();
+  try { await updateRec(did, fields); flash('Etapa actualizada'); }
+  catch(err) { flash('Error: '+err.message, true); await refresh(); }
+  did=null;
 }
 
-// ── DEAL MODAL ──
-function openDeal(id) {
-  const deal = deals.find(d => d.id === id);
-  if (!deal) return;
-  currentDealId = id;
-  const f = deal.fields;
+// ── MODAL ──
+function om(id) {
+  const d = deals.find(x=>x.id===id);
+  if(!d) return;
+  cid = id;
+  const f = d.fields;
+  document.getElementById('mTitle').textContent = f.OPORTUNIDAD||'Deal';
+  document.getElementById('mNom').value = f.OPORTUNIDAD||'';
+  document.getElementById('mTel').value = '';
+  document.getElementById('mEml').value = '';
+  document.getElementById('mFol').value = '';
+  document.getElementById('mVeh').value = f.OPORTUNIDAD||'';
+  document.getElementById('mVal').value = f['VALOR PIPELINE']||'';
+  document.getElementById('mVend').value = f['VENDEDOR ASIGNADO']||'';
+  document.getElementById('mVin').value = f['VIN FACTURADO']||'';
+  document.getElementById('mValC').value = f['VALOR CIERRE']||'';
+  document.getElementById('mFecC').value = f['FECHA CIERRE']||'';
+  document.getElementById('mMot').value = f['MOTIVO PERDIDA']||'';
+  document.getElementById('mNot').value = f.NOTAS||'';
 
-  document.getElementById('modalTitle').textContent = f.OPORTUNIDAD || 'Deal';
-  document.getElementById('mNombre').value = f.OPORTUNIDAD || '';
-  document.getElementById('mTelefono').value = '';
-  document.getElementById('mEmail').value = '';
-  document.getElementById('mFolio').value = '';
-  document.getElementById('mVehiculo').value = '';
-  document.getElementById('mValorPipeline').value = fmt(f['VALOR PIPELINE']);
-  document.getElementById('mEtapa').value = f.ETAPA || 'SQL';
-  document.getElementById('mVendedor').value = f.VENDEDOR || '';
-  document.getElementById('mVin').value = f['VIN FACTURADO'] || '';
-  document.getElementById('mValorCierre').value = f['VALOR CIERRE'] || '';
-  document.getElementById('mFechaCierre').value = f['FECHA CIERRE'] || '';
-  document.getElementById('mMotivoPerdida').value = f['MOTIVO PERDIDA'] || '';
-  document.getElementById('mNotas').value = f.NOTAS || '';
+  // Populate stage dropdown with allowed transitions
+  const cs = f.ETAPA||'SQL';
+  const sel = document.getElementById('mEta');
+  const allowed = [cs, ...(C.RULES[cs]||[])];
+  sel.innerHTML = allowed.map(s => `<option${s===cs?' selected':''}>${s}</option>`).join('');
 
-  document.getElementById('dealModal').classList.add('open');
+  onStageChange();
+  document.getElementById('OV').classList.add('open');
 }
 
-function closeModal() {
-  document.getElementById('dealModal').classList.remove('open');
-  currentDealId = null;
+function onStageChange() {
+  const v = document.getElementById('mEta').value;
+  document.getElementById('mCierreSection').style.display = v==='Ganada'?'block':'none';
+  document.getElementById('mPerdidaSection').style.display = v==='Perdida'?'block':'none';
 }
 
-async function saveDeal() {
-  if (!currentDealId) return;
+function cm() { document.getElementById('OV').classList.remove('open'); cid=null; }
+
+async function save() {
+  if(!cid) return;
+  const deal = deals.find(d=>d.id===cid);
+  const oldStage = deal?.fields.ETAPA||'SQL';
+  const newStage = document.getElementById('mEta').value;
+
   const fields = {
-    ETAPA: document.getElementById('mEtapa').value,
-    VENDEDOR: document.getElementById('mVendedor').value,
+    ETAPA: newStage,
+    'VENDEDOR ASIGNADO': document.getElementById('mVend').value,
     'VIN FACTURADO': document.getElementById('mVin').value,
-    'VALOR CIERRE': parseFloat(document.getElementById('mValorCierre').value) || null,
-    'FECHA CIERRE': document.getElementById('mFechaCierre').value || null,
-    'MOTIVO PERDIDA': document.getElementById('mMotivoPerdida').value || null,
-    NOTAS: document.getElementById('mNotas').value
+    'VALOR CIERRE': parseFloat(document.getElementById('mValC').value)||null,
+    'FECHA CIERRE': document.getElementById('mFecC').value||null,
+    'MOTIVO PERDIDA': document.getElementById('mMot').value||null,
+    NOTAS: document.getElementById('mNot').value,
+    'VALOR PIPELINE': parseFloat(document.getElementById('mVal').value)||null,
+    OPORTUNIDAD: document.getElementById('mVeh').value
   };
 
+  // Timestamps
+  if(newStage==='Visita Realizada' && oldStage!=='Visita Realizada' && !deal.fields.FECHA_VISITA) {
+    fields.FECHA_VISITA = new Date().toISOString();
+  }
+  if(newStage==='Ganada' && !fields['FECHA CIERRE']) {
+    fields['FECHA CIERRE'] = new Date().toISOString().split('T')[0];
+  }
+
   // Clean nulls
-  Object.keys(fields).forEach(k => { if (fields[k] === null || fields[k] === '') delete fields[k]; });
+  Object.keys(fields).forEach(k => { if(fields[k]===null||fields[k]==='') delete fields[k]; });
 
   try {
-    await updateDeal(currentDealId, fields);
+    await updateRec(cid, fields);
+    // Sync to Leads
+    if(deal.fields.LEAD) await syncToLead(deal.fields.LEAD, fields);
     // Update local
-    const deal = deals.find(d => d.id === currentDealId);
-    if (deal) Object.assign(deal.fields, fields);
-    renderKanban();
-    closeModal();
-  } catch(err) {
-    alert('Error guardando: ' + err.message);
-  }
+    Object.assign(deal.fields, fields);
+    render();
+    cm();
+    flash('Guardado');
+  } catch(err) { alert('Error: '+err.message); }
 }
 
-// ── BRAND SWITCH ──
-async function switchBrand(brand) {
-  currentBrand = brand;
-  document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t.dataset.brand === brand));
-  await refreshData();
+// ── UTILS ──
+function flash(msg, err) {
+  const el = document.getElementById('saveStatus');
+  el.textContent = msg;
+  el.style.background = err ? 'var(--color-error)' : 'var(--color-success)';
+  el.style.display = 'block';
+  setTimeout(() => el.style.display='none', 2000);
 }
 
-// ── SEARCH ──
-function filterDeals(q) {
-  searchQuery = q;
-  renderKanban();
+function sw(b) {
+  brand=b;
+  document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('active',t.dataset.b===b));
+  refresh();
 }
 
-// ── REFRESH ──
-async function refreshData() {
-  const kanban = document.getElementById('kanban');
-  kanban.innerHTML = '<div class="loading"><div class="loading-spinner"></div>Cargando pipeline...</div>';
-  try {
-    deals = await loadDeals();
-    renderKanban();
-  } catch(err) {
-    kanban.innerHTML = `<div class="loading" style="color:var(--color-error);">Error cargando datos: ${err.message}</div>`;
-  }
+function filter(v) { q=v; render(); }
+
+async function refresh() {
+  document.getElementById('K').innerHTML = '<div class="loading"><div class="spinner"></div>Cargando...</div>';
+  try { deals = await loadAll(); render(); }
+  catch(e) { document.getElementById('K').innerHTML = '<div class="loading" style="color:var(--color-error)">Error: '+e.message+'</div>'; }
 }
 
-// ── INIT ──
-document.addEventListener('DOMContentLoaded', () => refreshData());
-
-// Close modal on overlay click
-document.getElementById('dealModal').addEventListener('click', e => {
-  if (e.target === e.currentTarget) closeModal();
-});
-
-// Close modal on Escape
-document.addEventListener('keydown', e => {
-  if (e.key === 'Escape') closeModal();
-});
+document.addEventListener('DOMContentLoaded', refresh);
+document.getElementById('OV').addEventListener('click', e => { if(e.target===e.currentTarget) cm(); });
+document.addEventListener('keydown', e => { if(e.key==='Escape') cm(); });
 </script>
 </body>
 </html>
