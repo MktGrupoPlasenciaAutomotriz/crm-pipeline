@@ -169,7 +169,7 @@ body { font-family: var(--font-body); background: var(--neutral-100); color: var
       <div class="msec" id="mCierreSection" style="display:none">
         <div class="msec-t">Cierre</div>
         <div class="mrow">
-          <div class="mf"><label>VIN Facturado</label><input id="mVin"></div>
+          <div class="mf"><label>VIN Facturado</label><input id="mVin" maxlength="17" placeholder="17 caracteres" oninput="validateVin(this)"><div class="hint" id="mVinHint"></div></div>
           <div class="mf"><label>Valor Cierre</label><input id="mValC" type="number"></div>
         </div>
         <div class="mrow">
@@ -458,6 +458,22 @@ async function save() {
   const deal = deals.find(d=>d.id===cid);
   const oldStage = deal?.fields.ETAPA||'SQL';
   const newStage = document.getElementById('mEta').value;
+  const vinVal = document.getElementById('mVin').value;
+
+  // Validate VIN
+  if (vinVal && !isVinValid(vinVal)) {
+    flash('VIN invalido: debe ser 17 caracteres alfanumericos (sin I, O, Q)', true);
+    return;
+  }
+  // Require VIN for Ganada
+  if (newStage === 'Ganada' && !isVinValid(vinVal)) {
+    flash('VIN requerido para marcar como Ganada', true);
+    return;
+  }
+  if (newStage === 'Ganada' && !vinVal) {
+    flash('Captura el VIN para cerrar la venta', true);
+    return;
+  }
 
   const fields = {
     ETAPA: newStage,
@@ -492,6 +508,21 @@ async function save() {
     cm();
     flash('Guardado');
   } catch(err) { alert('Error: '+err.message); }
+}
+
+// ── VIN VALIDATION ──
+function validateVin(input) {
+  let v = input.value.toUpperCase().replace(/[^A-Z0-9]/g,'').replace(/[IOQ]/g,'');
+  input.value = v;
+  const hint = document.getElementById('mVinHint');
+  if (v.length === 0) { hint.textContent = ''; hint.style.color = ''; }
+  else if (v.length < 17) { hint.textContent = v.length + '/17 caracteres'; hint.style.color = 'var(--color-warning)'; }
+  else if (v.length === 17) { hint.textContent = 'VIN valido'; hint.style.color = 'var(--color-success)'; }
+}
+
+function isVinValid(v) {
+  if (!v || v.length === 0) return true; // empty is ok (not required until Ganada)
+  return /^[A-HJ-NPR-Z0-9]{17}$/.test(v);
 }
 
 // ── UTILS ──
