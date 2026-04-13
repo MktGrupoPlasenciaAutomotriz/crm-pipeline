@@ -9,171 +9,330 @@
 :root {
   --gp-black: #1A1A1A; --color-primary: #1E2740; --color-primary-light: #2D3748;
   --color-accent: #4299E1; --color-accent-hover: #3182CE;
+  --color-conversion: #C8102E; --color-conversion-hover: #A50D25;
   --color-success: #48BB78; --color-warning: #D69E2E; --color-error: #E53E3E;
   --neutral-50: #F7FAFC; --neutral-100: #EDF2F7; --neutral-200: #E2E8F0;
   --neutral-300: #CBD5E0; --neutral-400: #A0AEC0; --neutral-500: #718096;
   --neutral-600: #4A5568; --neutral-700: #2D3748; --neutral-800: #1A202C;
+  --neutral-900: #171923;
   --font-display: 'Montserrat', sans-serif; --font-body: 'Inter', sans-serif;
-  --radius-sm: 4px; --radius-md: 8px; --radius-lg: 12px;
-  --shadow-sm: 0 1px 3px rgba(0,0,0,0.1); --shadow-md: 0 4px 6px rgba(0,0,0,0.1); --shadow-lg: 0 10px 15px rgba(0,0,0,0.1);
+  --radius-sm: 4px; --radius-md: 8px; --radius-lg: 12px; --radius-xl: 16px; --radius-full: 9999px;
+  --space-1: 4px; --space-2: 8px; --space-3: 12px; --space-4: 16px;
+  --space-6: 24px; --space-8: 32px;
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.1), 0 1px 2px rgba(0,0,0,0.06);
+  --shadow-md: 0 4px 6px rgba(0,0,0,0.1), 0 2px 4px rgba(0,0,0,0.06);
+  --shadow-lg: 0 10px 15px rgba(0,0,0,0.1), 0 4px 6px rgba(0,0,0,0.05);
+  --duration-fast: 150ms; --duration-normal: 250ms; --duration-slow: 400ms;
+  --ease-default: cubic-bezier(0.4, 0, 0.2, 1);
+  --wa-green: #25D366;
 }
 * { margin:0; padding:0; box-sizing:border-box; }
 body { font-family: var(--font-body); background: var(--neutral-100); color: var(--gp-black); font-size: 14px; overflow: hidden; height: 100vh; display: flex; flex-direction: column; }
 
+/* ── SKIP LINK (A11Y) ── */
+.skip-link { position:absolute; left:-9999px; top:auto; width:1px; height:1px; overflow:hidden; z-index:999; }
+.skip-link:focus { position:fixed; top:8px; left:8px; width:auto; height:auto; padding:10px 18px; background:var(--color-accent); color:#F7FAFC; border-radius:var(--radius-md); font-weight:600; font-size:13px; z-index:999; outline:3px solid #F7FAFC; }
+
+/* ── FOCUS VISIBLE (A11Y) ── */
+*:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 2px; }
+button:focus-visible, a:focus-visible, [tabindex]:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 2px; }
+
 /* ── HEADER ── */
-.header { background: var(--color-primary); color: #F7FAFC; padding: 0 24px; height: 52px; display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; }
-.header-left { display: flex; align-items: center; gap: 12px; }
-.header-title { font-family: var(--font-display); font-weight: 700; font-size: 15px; }
-.header-stats { display: flex; gap: 24px; }
+.header { background: var(--color-primary); color: #F7FAFC; padding: 0 24px; height: 60px; display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; }
+.header-left { display: flex; align-items: center; gap: 16px; }
+.header-brand { font-family: var(--font-display); font-weight: 800; font-size: 16px; letter-spacing: -0.3px; display:flex; align-items:center; gap:10px; }
+.header-brand svg { width:24px; height:24px; fill:#F7FAFC; opacity:0.9; }
+.header-brand .brand-divider { width:1px; height:24px; background:rgba(247,250,252,0.2); }
+.header-brand .brand-crm { font-weight:600; font-size:13px; color:var(--neutral-400); }
+.header-stats { display: flex; gap: 28px; align-items:center; }
 .stat { text-align: center; }
-.stat-num { font-family: var(--font-display); font-weight: 700; font-size: 16px; }
-.stat-label { font-size: 9px; color: var(--neutral-400); text-transform: uppercase; letter-spacing: 0.5px; }
+.stat-num { font-family: var(--font-display); font-weight: 700; font-size: 18px; line-height:1.2; }
+.stat-label { font-size: 10px; color: var(--neutral-400); text-transform: uppercase; letter-spacing: 0.5px; font-weight: 500; }
+.stat-divider { width:1px; height:32px; background:rgba(247,250,252,0.15); }
 
 /* ── TABS ── */
 .tabs { background: var(--neutral-800); display: flex; padding: 0 24px; flex-shrink: 0; }
-.tab { padding: 10px 20px; color: var(--neutral-400); font-size: 12px; font-weight: 600; cursor: pointer; border-bottom: 2px solid transparent; transition: all 0.15s; }
+.tab { padding: 11px 22px; color: var(--neutral-400); font-size: 12px; font-weight: 600; cursor: pointer; border-bottom: 2px solid transparent; transition: all var(--duration-fast) var(--ease-default); user-select:none; }
 .tab:hover { color: #F7FAFC; }
 .tab.active { color: #F7FAFC; border-bottom-color: var(--color-accent); }
 
 /* ── TOOLBAR ── */
 .toolbar { padding: 10px 24px; display: flex; align-items: center; gap: 10px; background: #fff; border-bottom: 1px solid var(--neutral-200); flex-shrink: 0; }
-.toolbar input { padding: 7px 12px; border: 1px solid var(--neutral-300); border-radius: var(--radius-md); font-size: 13px; width: 220px; font-family: var(--font-body); }
-.toolbar input:focus { outline: none; border-color: var(--color-accent); }
-.toolbar-btn { padding: 7px 14px; border-radius: var(--radius-md); font-size: 12px; font-weight: 600; cursor: pointer; border: 1px solid var(--neutral-300); background: #fff; color: var(--neutral-700); }
-.toolbar-btn:hover { background: var(--neutral-50); }
-.toolbar-right { margin-left: auto; font-size: 12px; color: var(--neutral-500); }
-.toolbar-right strong { color: var(--gp-black); }
+.search-wrap { position:relative; display:flex; align-items:center; }
+.search-wrap input { padding: 8px 34px 8px 36px; border: 1px solid var(--neutral-300); border-radius: var(--radius-md); font-size: 13px; width: 320px; font-family: var(--font-body); transition: border-color var(--duration-fast); }
+.search-wrap input:focus { outline: none; border-color: var(--color-accent); box-shadow: 0 0 0 3px rgba(66,153,225,0.12); }
+.search-wrap .search-icon { position:absolute; left:10px; width:16px; height:16px; color:var(--neutral-400); pointer-events:none; }
+.search-wrap .search-clear { position:absolute; right:8px; width:20px; height:20px; border:none; background:var(--neutral-200); color:var(--neutral-600); border-radius:50%; cursor:pointer; font-size:12px; line-height:20px; text-align:center; display:none; padding:0; }
+.search-wrap .search-clear:hover { background:var(--neutral-300); }
+.search-results-badge { font-size:12px; color:var(--neutral-500); font-weight:500; display:none; }
+.toolbar-btn { padding: 8px 16px; border-radius: var(--radius-md); font-size: 12px; font-weight: 600; cursor: pointer; border: 1px solid var(--neutral-300); background: #fff; color: var(--neutral-700); transition: all var(--duration-fast); display:flex; align-items:center; gap:6px; }
+.toolbar-btn:hover { background: var(--neutral-50); border-color:var(--neutral-400); }
+.toolbar-right { margin-left: auto; font-size: 13px; color: var(--neutral-500); font-weight:500; }
+.toolbar-right strong { color: var(--gp-black); font-family:var(--font-display); font-weight:700; }
 
 /* ── KANBAN ── */
-.kanban { display: flex; gap: 10px; padding: 12px 24px; flex: 1; overflow-x: auto; overflow-y: hidden; align-items: flex-start; }
-.kcol { min-width: 260px; width: 260px; flex-shrink: 0; background: var(--neutral-100); border-radius: var(--radius-lg); display: flex; flex-direction: column; max-height: 100%; }
-.kcol-head { padding: 10px 14px; display: flex; align-items: center; justify-content: space-between; border-bottom: 3px solid var(--neutral-300); flex-shrink: 0; }
-.kcol-head .lbl { font-weight: 700; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; display: flex; align-items: center; gap: 6px; }
-.kcol-head .cnt { background: var(--neutral-300); color: var(--neutral-700); font-size: 10px; font-weight: 700; padding: 1px 7px; border-radius: 99px; }
-.kcol-head .val { font-size: 11px; font-weight: 600; color: var(--neutral-500); }
-.kcol[data-s="SQL"] .kcol-head { border-bottom-color: var(--color-accent); }
-.kcol[data-s="Cita Agendada"] .kcol-head { border-bottom-color: #0BC5EA; }
-.kcol[data-s="Visita Realizada"] .kcol-head { border-bottom-color: #38B2AC; }
-.kcol[data-s="Negociacion"] .kcol-head { border-bottom-color: var(--color-warning); }
-.kcol[data-s="Ganada"] .kcol-head { border-bottom-color: var(--color-success); }
-.kcol[data-s="Perdida"] .kcol-head { border-bottom-color: var(--color-error); }
-.kcol-body { padding: 6px; flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 6px; min-height: 60px; }
-.kcol-body.over { background: rgba(66,153,225,0.08); border-radius: var(--radius-md); }
+.kanban { display: flex; gap: 10px; padding: 12px 24px; flex: 1; overflow-x: auto; overflow-y: hidden; align-items: flex-start; scroll-behavior:smooth; }
+.kcol { min-width: 264px; width: 264px; flex-shrink: 0; background: var(--neutral-100); border-radius: var(--radius-lg); display: flex; flex-direction: column; max-height: 100%; border-top: 4px solid var(--neutral-300); transition: background var(--duration-fast); }
+.kcol-head { padding: 12px 14px; display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; }
+.kcol-head .lbl { font-weight: 700; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; display: flex; align-items: center; gap: 8px; color:var(--neutral-700); }
+.kcol-head .cnt { background: var(--neutral-300); color: var(--neutral-700); font-size: 10px; font-weight: 700; width:22px; height:22px; border-radius: 50%; display:inline-flex; align-items:center; justify-content:center; }
+.kcol-head .val { font-family:var(--font-display); font-size: 16px; font-weight: 700; color: var(--neutral-700); }
+.kcol[data-s="SQL"] { border-top-color: var(--color-accent); }
+.kcol[data-s="Cita Agendada"] { border-top-color: #0BC5EA; }
+.kcol[data-s="Visita Realizada"] { border-top-color: #38B2AC; }
+.kcol[data-s="Negociacion"] { border-top-color: var(--color-warning); }
+.kcol[data-s="Ganada"] { border-top-color: var(--color-success); background: rgba(72,187,120,0.04); }
+.kcol[data-s="Perdida"] { border-top-color: var(--color-error); background: rgba(229,62,62,0.04); }
+.kcol-body { padding: 6px; flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 6px; min-height: 60px; border-radius:0 0 var(--radius-lg) var(--radius-lg); transition: background var(--duration-fast); }
+.kcol-body.over { background: rgba(66,153,225,0.1); }
 
 /* ── CARD ── */
-.card { background: #fff; border-radius: var(--radius-md); padding: 12px 14px; box-shadow: var(--shadow-sm); cursor: grab; transition: all 0.12s; border-left: 3px solid transparent; }
+.card { background: #fff; border-radius: var(--radius-md); padding: 12px 14px; box-shadow: var(--shadow-sm); cursor: grab; transition: all var(--duration-fast) var(--ease-default); border-left: 3px solid transparent; position:relative; }
 .card:hover { box-shadow: var(--shadow-md); transform: translateY(-1px); }
+.card:focus-visible { box-shadow: var(--shadow-md); outline: 2px solid var(--color-accent); outline-offset: 1px; }
 .card.dragging { opacity: 0.4; }
-.card-name { font-weight: 700; font-size: 13px; margin-bottom: 2px; }
-.card-vehicle { font-size: 11px; color: var(--neutral-500); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 6px; }
+.card-name { font-weight: 700; font-size: 14px; margin-bottom: 2px; color:var(--gp-black); line-height:1.3; }
+.card-vehicle { font-size: 12px; color: var(--neutral-500); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 6px; font-weight:500; }
+.card-contact { display:flex; align-items:center; gap:6px; margin-bottom:8px; }
+.card-phone-link { display:inline-flex; align-items:center; gap:3px; font-size:12px; color:var(--color-accent); text-decoration:none; font-weight:500; transition:color var(--duration-fast); }
+.card-phone-link:hover { color:var(--color-accent-hover); }
+.card-phone-link svg { width:13px; height:13px; }
+.card-wa-btn { display:inline-flex; align-items:center; justify-content:center; width:24px; height:24px; background:var(--wa-green); color:#fff; border-radius:50%; text-decoration:none; transition: transform var(--duration-fast), box-shadow var(--duration-fast); flex-shrink:0; }
+.card-wa-btn:hover { transform:scale(1.1); box-shadow:0 2px 8px rgba(37,211,102,0.4); }
+.card-wa-btn svg { width:14px; height:14px; }
 .card-row { display: flex; justify-content: space-between; align-items: center; }
-.card-price { font-family: var(--font-display); font-weight: 700; font-size: 13px; color: var(--color-primary); }
-.card-vendor { font-size: 10px; color: var(--neutral-400); max-width: 100px; overflow: hidden; text-overflow: ellipsis; }
-.card-folio { font-size: 9px; color: var(--neutral-400); font-family: monospace; margin-top: 4px; }
+.card-price { font-family: var(--font-display); font-weight: 700; font-size: 14px; color: var(--color-primary); }
+.card-vendor { font-size: 11px; color: var(--neutral-500); max-width: 110px; overflow: hidden; text-overflow: ellipsis; white-space:nowrap; display:flex; align-items:center; gap:3px; }
+.card-vendor svg { width:12px; height:12px; color:var(--neutral-400); flex-shrink:0; }
+.card-meta { display:flex; justify-content:space-between; align-items:center; margin-top:6px; }
+.card-folio { font-size: 10px; color: var(--neutral-400); font-family: monospace; }
+.card-date { font-size:10px; color:var(--neutral-400); }
 .card[data-s="Ganada"] { border-left-color: var(--color-success); background: #F0FFF4; }
 .card[data-s="Perdida"] { border-left-color: var(--color-error); opacity: 0.55; }
-.empty-col { text-align: center; padding: 20px 10px; color: var(--neutral-400); font-size: 11px; }
+.empty-col { text-align: center; padding: 20px 10px; color: var(--neutral-400); font-size: 12px; }
 
 /* ── MODAL ── */
-.overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:200; align-items:center; justify-content:center; }
+.overlay { display:none; position:fixed; inset:0; background:rgba(26,32,44,0.6); z-index:200; align-items:center; justify-content:center; backdrop-filter:blur(2px); }
 .overlay.open { display:flex; }
-.modal { background:#fff; border-radius:var(--radius-lg); width:580px; max-width:95vw; max-height:90vh; overflow-y:auto; }
-.modal-head { padding:18px 22px 14px; border-bottom:1px solid var(--neutral-200); display:flex; justify-content:space-between; align-items:center; }
-.modal-head h2 { font-family:var(--font-display); font-weight:700; font-size:16px; }
-.modal-x { background:none; border:none; font-size:18px; cursor:pointer; color:var(--neutral-400); padding:4px 8px; }
-.modal-x:hover { color:var(--gp-black); }
-.modal-body { padding:18px 22px; }
-.msec { margin-bottom:16px; }
-.msec-t { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; color:var(--neutral-500); margin-bottom:6px; }
+.modal { background:#fff; border-radius:var(--radius-xl); width:620px; max-width:95vw; max-height:90vh; overflow-y:auto; box-shadow: 0 24px 48px -8px rgba(0,0,0,0.18); }
+.modal-head { padding:20px 24px 16px; border-bottom:1px solid var(--neutral-200); display:flex; justify-content:space-between; align-items:center; }
+.modal-head h2 { font-family:var(--font-display); font-weight:700; font-size:17px; color:var(--gp-black); }
+.modal-x { background:none; border:none; font-size:20px; cursor:pointer; color:var(--neutral-400); padding:6px 10px; border-radius:var(--radius-sm); transition:all var(--duration-fast); }
+.modal-x:hover { color:var(--gp-black); background:var(--neutral-100); }
+
+/* Stage stepper */
+.stage-stepper { display:flex; align-items:center; gap:0; padding:16px 24px 0; }
+.step { flex:1; text-align:center; position:relative; }
+.step-dot { width:24px; height:24px; border-radius:50%; background:var(--neutral-200); color:var(--neutral-500); font-size:10px; font-weight:700; display:inline-flex; align-items:center; justify-content:center; transition: all var(--duration-fast); position:relative; z-index:1; }
+.step.active .step-dot { background:var(--color-accent); color:#F7FAFC; }
+.step.done .step-dot { background:var(--color-success); color:#F7FAFC; }
+.step.lost .step-dot { background:var(--color-error); color:#F7FAFC; }
+.step-label { font-size:9px; font-weight:600; color:var(--neutral-400); margin-top:4px; text-transform:uppercase; letter-spacing:0.3px; }
+.step.active .step-label, .step.done .step-label { color:var(--neutral-700); }
+.step-line { position:absolute; top:12px; left:50%; right:-50%; height:2px; background:var(--neutral-200); z-index:0; }
+.step.done .step-line { background:var(--color-success); }
+.step:last-child .step-line { display:none; }
+
+.modal-body { padding:20px 24px; }
+.msec { margin-bottom:18px; }
+.msec-t { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; color:var(--neutral-500); margin-bottom:8px; }
 .mrow { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:10px; }
+
+/* Contact action buttons */
+.contact-actions { display:flex; gap:8px; margin-top:8px; margin-bottom:4px; }
+.contact-btn { display:inline-flex; align-items:center; gap:6px; padding:7px 14px; border-radius:var(--radius-md); font-size:12px; font-weight:600; text-decoration:none; cursor:pointer; border:1px solid; transition:all var(--duration-fast); font-family:var(--font-body); }
+.contact-btn svg { width:14px; height:14px; }
+.contact-btn.btn-call { background:rgba(66,153,225,0.08); color:var(--color-accent); border-color:rgba(66,153,225,0.3); }
+.contact-btn.btn-call:hover { background:var(--color-accent); color:#F7FAFC; }
+.contact-btn.btn-wa { background:rgba(37,211,102,0.08); color:#1a9e4a; border-color:rgba(37,211,102,0.3); }
+.contact-btn.btn-wa:hover { background:var(--wa-green); color:#F7FAFC; }
+.contact-btn.btn-email { background:rgba(113,128,150,0.08); color:var(--neutral-600); border-color:var(--neutral-300); }
+.contact-btn.btn-email:hover { background:var(--neutral-600); color:#F7FAFC; }
+
 .mf label { display:block; font-size:11px; font-weight:600; color:var(--neutral-600); margin-bottom:3px; }
-.mf input,.mf select,.mf textarea { width:100%; padding:7px 10px; border:1px solid var(--neutral-300); border-radius:var(--radius-sm); font-size:12px; font-family:var(--font-body); }
-.mf input:focus,.mf select:focus,.mf textarea:focus { outline:none; border-color:var(--color-accent); }
-.mf input[readonly] { background:var(--neutral-50); color:var(--neutral-500); cursor:default; }
+.mf input,.mf select,.mf textarea { width:100%; padding:8px 10px; border:1px solid var(--neutral-300); border-radius:var(--radius-sm); font-size:13px; font-family:var(--font-body); transition: border-color var(--duration-fast), box-shadow var(--duration-fast); }
+.mf input:focus,.mf select:focus,.mf textarea:focus { outline:none; border-color:var(--color-accent); box-shadow: 0 0 0 3px rgba(66,153,225,0.12); }
+.mf input[readonly] { background:var(--neutral-50); color:var(--neutral-500); cursor:default; border-style:dashed; }
+.mf input:not([readonly]),.mf select,.mf textarea { background: #FFFEF7; }
 .mf .hint { font-size:10px; color:var(--neutral-400); margin-top:2px; }
-.modal-foot { padding:14px 22px; border-top:1px solid var(--neutral-200); display:flex; justify-content:flex-end; gap:8px; }
-.btn { padding:8px 18px; border-radius:var(--radius-md); font-size:12px; font-weight:600; cursor:pointer; border:none; }
-.btn-primary { background:var(--color-accent); color:#fff; }
-.btn-primary:hover { background:var(--color-accent-hover); }
-.btn-cancel { background:var(--neutral-100); color:var(--neutral-700); }
-.btn-save-status { position:fixed; bottom:16px; left:50%; transform:translateX(-50%); background:var(--color-success); color:#fff; padding:8px 20px; border-radius:var(--radius-md); font-size:12px; font-weight:600; box-shadow:var(--shadow-lg); display:none; z-index:300; animation: fadeIn 0.2s; }
-@keyframes fadeIn { from{opacity:0;transform:translateX(-50%) translateY(8px)} to{opacity:1;transform:translateX(-50%) translateY(0)} }
-.loading { text-align:center; padding:40px; color:var(--neutral-500); width:100%; }
-.spinner { width:28px; height:28px; border:3px solid var(--neutral-200); border-top-color:var(--color-accent); border-radius:50%; animation:spin 0.7s linear infinite; margin:0 auto 10px; }
-@keyframes spin { to{transform:rotate(360deg)} }
+.modal-foot { padding:16px 24px; border-top:1px solid var(--neutral-200); display:flex; justify-content:flex-end; gap:10px; }
+.btn { padding:9px 20px; border-radius:var(--radius-md); font-size:13px; font-weight:600; cursor:pointer; border:none; transition:all var(--duration-fast); font-family:var(--font-body); }
+.btn-primary { background:var(--color-accent); color:#F7FAFC; padding:10px 28px; font-size:14px; font-weight:700; box-shadow: 0 2px 8px rgba(66,153,225,0.3); }
+.btn-primary:hover { background:var(--color-accent-hover); box-shadow: 0 4px 12px rgba(66,153,225,0.4); transform:translateY(-1px); }
+.btn-cancel { background:transparent; color:var(--neutral-500); border:1px solid var(--neutral-300); }
+.btn-cancel:hover { background:var(--neutral-50); color:var(--neutral-700); }
+
+/* ── TOAST ── */
+.toast { position:fixed; bottom:20px; left:50%; transform:translateX(-50%); padding:10px 22px; border-radius:var(--radius-md); font-size:13px; font-weight:600; box-shadow:var(--shadow-lg); display:none; z-index:300; animation: toastIn 0.25s var(--ease-default); color:#F7FAFC; display:none; align-items:center; gap:8px; }
+.toast.show { display:flex; }
+.toast svg { width:18px; height:18px; flex-shrink:0; }
+.toast.success { background:var(--color-success); }
+.toast.error { background:var(--color-error); }
+@keyframes toastIn { from{opacity:0;transform:translateX(-50%) translateY(12px)} to{opacity:1;transform:translateX(-50%) translateY(0)} }
+
+/* ── SKELETON LOADING ── */
+.skeleton-board { display:flex; gap:10px; padding:12px 24px; flex:1; }
+.skeleton-col { min-width:264px; width:264px; flex-shrink:0; background:var(--neutral-100); border-radius:var(--radius-lg); border-top:4px solid var(--neutral-200); padding:12px; }
+.skeleton-head { display:flex; justify-content:space-between; margin-bottom:12px; }
+.skeleton-block { background:linear-gradient(90deg, var(--neutral-200) 25%, var(--neutral-100) 50%, var(--neutral-200) 75%); background-size:200% 100%; animation: shimmer 1.5s infinite; border-radius:var(--radius-sm); }
+.skeleton-card { background:#fff; border-radius:var(--radius-md); padding:14px; margin-bottom:6px; }
+.skeleton-card .sk-line { height:10px; margin-bottom:8px; border-radius:3px; }
+.skeleton-card .sk-line:last-child { margin-bottom:0; }
+@keyframes shimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
+
+.loading-center { text-align:center; padding:40px; color:var(--neutral-500); width:100%; }
+
+/* ── RESPONSIVE: TABLET (768-1024) ── */
+@media (max-width: 1024px) {
+  .kanban { padding: 10px 12px; gap: 8px; -webkit-overflow-scrolling: touch; }
+  .kcol { min-width: 240px; width: 240px; }
+  .header-stats { gap: 16px; }
+  .toolbar { padding: 8px 12px; }
+  .search-wrap input { width: 240px; }
+}
+
+/* ── RESPONSIVE: MOBILE (<768px) ── */
+@media (max-width: 767px) {
+  body { overflow-y:auto; overflow-x:hidden; }
+  .header { height:auto; padding:10px 16px; flex-wrap:wrap; gap:8px; }
+  .header-brand { font-size:14px; }
+  .header-stats { gap:12px; width:100%; justify-content:space-around; }
+  .stat-num { font-size:15px; }
+  .stat-divider { display:none; }
+  .tabs { padding:0 12px; overflow-x:auto; -webkit-overflow-scrolling:touch; }
+  .toolbar { flex-wrap:wrap; padding:8px 12px; gap:8px; }
+  .search-wrap { width:100%; order:-1; }
+  .search-wrap input { width:100%; }
+  .toolbar-right { width:100%; text-align:center; }
+  /* Switch to list view */
+  .kanban { flex-direction:column; overflow-x:hidden; overflow-y:auto; padding:8px 12px; gap:12px; align-items:stretch; }
+  .kcol { min-width:100%; width:100%; max-height:none; }
+  .kcol-body { max-height:300px; }
+  .card-name { font-size:14px; }
+  .card-price { font-size:14px; }
+  .modal { max-width:100vw; border-radius:var(--radius-lg) var(--radius-lg) 0 0; max-height:95vh; }
+  .stage-stepper { padding:12px 16px 0; overflow-x:auto; }
+  .step-label { font-size:8px; }
+  .mrow { grid-template-columns:1fr; }
+  .contact-actions { flex-wrap:wrap; }
+}
+
+/* ── REDUCED MOTION ── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+}
 </style>
 </head>
 <body>
 
-<header class="header">
+<a href="#K" class="skip-link" aria-label="Saltar al tablero Kanban">Saltar al contenido</a>
+
+<header class="header" role="banner">
   <div class="header-left">
-    <span class="header-title">Pipeline CRM</span>
+    <div class="header-brand">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2L2 7v10l10 5 10-5V7L12 2zm0 2.18l7 3.5v7.64l-7 3.5-7-3.5V7.68l7-3.5z"/></svg>
+      Grupo Plasencia
+      <span class="brand-divider"></span>
+      <span class="brand-crm">Pipeline CRM</span>
+    </div>
   </div>
-  <div class="header-stats">
+  <div class="header-stats" role="status" aria-label="Resumen del pipeline">
     <div class="stat"><div class="stat-num" id="sDeals">-</div><div class="stat-label">Deals</div></div>
+    <div class="stat-divider"></div>
     <div class="stat"><div class="stat-num" id="sPipe">-</div><div class="stat-label">Pipeline</div></div>
+    <div class="stat-divider"></div>
     <div class="stat"><div class="stat-num" id="sWon">-</div><div class="stat-label">Ganadas</div></div>
+    <div class="stat-divider"></div>
     <div class="stat"><div class="stat-num" id="sLost">-</div><div class="stat-label">Perdidas</div></div>
+    <div class="stat-divider"></div>
+    <div class="stat"><div class="stat-num" id="sRate">-</div><div class="stat-label">Tasa Cierre</div></div>
   </div>
 </header>
 
-<nav class="tabs">
-  <div class="tab active" data-b="hyundai" onclick="sw('hyundai')">Hyundai</div>
-  <div class="tab" data-b="stellantis" onclick="sw('stellantis')">Stellantis</div>
-  <div class="tab" data-b="seminuevos" onclick="sw('seminuevos')">Seminuevos</div>
+<nav class="tabs" role="tablist" aria-label="Marcas">
+  <div class="tab active" data-b="hyundai" onclick="sw('hyundai')" role="tab" aria-selected="true" tabindex="0" aria-label="Pipeline Hyundai">Hyundai</div>
+  <div class="tab" data-b="stellantis" onclick="sw('stellantis')" role="tab" aria-selected="false" tabindex="0" aria-label="Pipeline Stellantis">Stellantis</div>
+  <div class="tab" data-b="seminuevos" onclick="sw('seminuevos')" role="tab" aria-selected="false" tabindex="0" aria-label="Pipeline Seminuevos">Seminuevos</div>
 </nav>
 
-<div class="toolbar">
-  <input type="text" placeholder="Buscar nombre, folio, vehiculo..." oninput="filter(this.value)">
-  <button class="toolbar-btn" onclick="refresh()">Actualizar</button>
+<div class="toolbar" role="toolbar" aria-label="Herramientas del pipeline">
+  <div class="search-wrap">
+    <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+    <input type="text" id="searchInput" placeholder="Buscar nombre, folio, vehiculo..." oninput="filter(this.value)" aria-label="Buscar deals">
+    <button class="search-clear" id="searchClear" onclick="clearSearch()" aria-label="Limpiar busqueda">&times;</button>
+  </div>
+  <span class="search-results-badge" id="searchBadge" aria-live="polite"></span>
+  <button class="toolbar-btn" onclick="refresh()" aria-label="Actualizar datos">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M23 4v6h-6M1 20v-6h6"/><path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/></svg>
+    Actualizar
+  </button>
   <div class="toolbar-right">Pipeline: <strong id="tPipe">$0</strong></div>
 </div>
 
-<div class="kanban" id="K"></div>
+<div class="kanban" id="K" role="region" aria-label="Tablero Kanban"></div>
 
-<div class="btn-save-status" id="saveStatus">Guardado</div>
+<!-- TOAST -->
+<div class="toast" id="toast" role="alert" aria-live="assertive">
+  <svg id="toastIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"></svg>
+  <span id="toastMsg"></span>
+</div>
 
 <!-- MODAL -->
-<div class="overlay" id="OV">
+<div class="overlay" id="OV" role="dialog" aria-modal="true" aria-labelledby="mTitle">
   <div class="modal">
     <div class="modal-head">
       <h2 id="mTitle">Deal</h2>
-      <button class="modal-x" onclick="cm()">&times;</button>
+      <button class="modal-x" onclick="cm()" aria-label="Cerrar modal">&times;</button>
     </div>
+    <div class="stage-stepper" id="mStepper" aria-label="Progreso de la oportunidad"></div>
     <div class="modal-body">
       <div class="msec">
         <div class="msec-t">Contacto</div>
         <div class="mrow">
-          <div class="mf"><label>Nombre</label><input id="mNom" readonly></div>
-          <div class="mf"><label>Folio</label><input id="mFol" readonly></div>
+          <div class="mf"><label for="mNom">Nombre</label><input id="mNom" readonly></div>
+          <div class="mf"><label for="mFol">Folio</label><input id="mFol" readonly></div>
         </div>
         <div class="mrow">
-          <div class="mf"><label>Telefono</label><input id="mTel" readonly> <div class="hint"><a id="mTelLink" href="#" style="color:var(--color-accent);text-decoration:none;font-size:11px;">Llamar</a> &middot; <a id="mWaLink" href="#" target="_blank" style="color:#25D366;text-decoration:none;font-size:11px;">WhatsApp</a></div></div>
-          <div class="mf"><label>Email</label><input id="mEml" readonly> <div class="hint"><a id="mEmlLink" href="#" style="color:var(--color-accent);text-decoration:none;font-size:11px;">Enviar correo</a></div></div>
+          <div class="mf"><label for="mTel">Telefono</label><input id="mTel" readonly></div>
+          <div class="mf"><label for="mEml">Email</label><input id="mEml" readonly></div>
+        </div>
+        <div class="contact-actions" id="mContactActions">
+          <a id="mTelLink" href="#" class="contact-btn btn-call" aria-label="Llamar por telefono">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 16.92z"/></svg>
+            Llamar
+          </a>
+          <a id="mWaLink" href="#" target="_blank" class="contact-btn btn-wa" aria-label="Enviar WhatsApp">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+            WhatsApp
+          </a>
+          <a id="mEmlLink" href="#" class="contact-btn btn-email" aria-label="Enviar correo electronico">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            Email
+          </a>
         </div>
       </div>
       <div class="msec">
         <div class="msec-t">Oportunidad</div>
         <div class="mrow">
-          <div class="mf"><label>Vehiculo</label><input id="mVeh"><div class="hint">Editable si el cliente cambia de auto en piso</div></div>
-          <div class="mf"><label>Valor Oportunidad</label><input id="mVal" type="number"><div class="hint">Precio del vehiculo</div></div>
+          <div class="mf"><label for="mVeh">Vehiculo</label><input id="mVeh"><div class="hint">Editable si el cliente cambia de auto en piso</div></div>
+          <div class="mf"><label for="mVal">Valor Oportunidad</label><input id="mVal" type="number"><div class="hint">Precio del vehiculo</div></div>
         </div>
         <div class="mrow">
           <div class="mf">
-            <label>Etapa</label>
+            <label for="mEta">Etapa</label>
             <select id="mEta" onchange="onStageChange()"></select>
           </div>
-          <div class="mf"><label>Vendedor Asignado</label><input id="mVend" placeholder="Tu nombre"></div>
+          <div class="mf"><label for="mVend">Vendedor Asignado</label><input id="mVend" placeholder="Tu nombre"></div>
         </div>
       </div>
       <div class="msec" id="mCierreSection" style="display:none">
         <div class="msec-t">Cierre</div>
         <div class="mrow">
-          <div class="mf"><label>VIN Facturado</label><input id="mVin" maxlength="17" placeholder="17 caracteres" oninput="validateVin(this)"><div class="hint" id="mVinHint"></div></div>
-          <div class="mf"><label>Valor Cierre</label><input id="mValC" type="number"></div>
+          <div class="mf"><label for="mVin">VIN Facturado</label><input id="mVin" maxlength="17" placeholder="17 caracteres" oninput="validateVin(this)"><div class="hint" id="mVinHint"></div></div>
+          <div class="mf"><label for="mValC">Valor Cierre</label><input id="mValC" type="number"></div>
         </div>
         <div class="mrow">
-          <div class="mf"><label>Fecha Cierre</label><input id="mFecC" type="date"></div>
+          <div class="mf"><label for="mFecC">Fecha Cierre</label><input id="mFecC" type="date"></div>
           <div class="mf">&nbsp;</div>
         </div>
       </div>
@@ -181,9 +340,9 @@ body { font-family: var(--font-body); background: var(--neutral-100); color: var
         <div class="msec-t">Motivo de Perdida</div>
         <div class="mrow">
           <div class="mf">
-            <label>Motivo</label>
+            <label for="mMot">Motivo</label>
             <select id="mMot">
-              <option value="">—</option>
+              <option value="">--</option>
               <option>No contesto</option><option>Precio</option><option>Financiamiento rechazado</option>
               <option>Compro en otro lado</option><option>No le gusto</option><option>Otro</option>
             </select>
@@ -192,12 +351,12 @@ body { font-family: var(--font-body); background: var(--neutral-100); color: var
         </div>
       </div>
       <div class="msec">
-        <div class="mf"><label>Notas</label><textarea id="mNot" rows="2" placeholder="Notas..."></textarea></div>
+        <div class="mf"><label for="mNot">Notas</label><textarea id="mNot" rows="2" placeholder="Notas..."></textarea></div>
       </div>
     </div>
     <div class="modal-foot">
       <button class="btn btn-cancel" onclick="cm()">Cancelar</button>
-      <button class="btn btn-primary" onclick="save()">Guardar</button>
+      <button class="btn btn-primary" onclick="save()" aria-label="Guardar cambios">Guardar</button>
     </div>
   </div>
 </div>
@@ -251,7 +410,7 @@ async function updateRec(id, fields) {
   return api(C.T[brand].p, { method:'PATCH', body:{records:[{id,fields}]} });
 }
 
-// ── SYNC LEADS → PIPELINE (auto-create missing) ──
+// ── SYNC LEADS -> PIPELINE (auto-create missing) ──
 async function syncLeadsToPipeline() {
   // 1. Get all leads
   let leads=[], off=null;
@@ -312,79 +471,156 @@ async function syncToLead(leadIds, fields) {
   });
 }
 
+// ── RELATIVE DATE ──
+function relDate(iso) {
+  if (!iso) return '';
+  const d = new Date(iso);
+  const now = new Date();
+  const diff = Math.floor((now - d) / (1000*60*60*24));
+  if (diff === 0) return 'hoy';
+  if (diff === 1) return 'ayer';
+  if (diff < 7) return 'hace ' + diff + 'd';
+  if (diff < 30) return 'hace ' + Math.floor(diff/7) + 'sem';
+  return 'hace ' + Math.floor(diff/30) + 'mes';
+}
+
 // ── RENDER ──
 const fmt = n => '$'+(n||0).toLocaleString('es-MX');
 
-function render() {
+function renderSkeleton() {
   const K = document.getElementById('K');
-  const filt = q ? deals.filter(d => {
-    const f=d.fields, t=`${f.OPORTUNIDAD||''} ${f['VENDEDOR ASIGNADO']||''} ${f['VIN FACTURADO']||''}`.toLowerCase();
-    return t.includes(q.toLowerCase());
+  K.innerHTML = C.STAGES.map(function() {
+    return '<div class="skeleton-col"><div class="skeleton-head"><div class="skeleton-block" style="width:80px;height:12px"></div><div class="skeleton-block" style="width:50px;height:12px"></div></div>' +
+      '<div class="skeleton-card"><div class="sk-line skeleton-block" style="width:70%;height:12px"></div><div class="sk-line skeleton-block" style="width:50%;height:10px"></div><div class="sk-line skeleton-block" style="width:90%;height:10px"></div></div>' +
+      '<div class="skeleton-card"><div class="sk-line skeleton-block" style="width:60%;height:12px"></div><div class="sk-line skeleton-block" style="width:45%;height:10px"></div><div class="sk-line skeleton-block" style="width:80%;height:10px"></div></div>' +
+      '<div class="skeleton-card"><div class="sk-line skeleton-block" style="width:75%;height:12px"></div><div class="sk-line skeleton-block" style="width:55%;height:10px"></div></div></div>';
+  }).join('');
+}
+
+function render() {
+  var KB = document.getElementById('K');
+  var filt = q ? deals.filter(function(d) {
+    var f=d.fields, t=(f.OPORTUNIDAD||'')+' '+(f['VENDEDOR ASIGNADO']||'')+' '+(f['VIN FACTURADO']||'')+' '+(f.FOLIO||'')+' '+(f.VEHICULO||'')+' '+(f.TELEFONO||'');
+    return t.toLowerCase().indexOf(q.toLowerCase()) !== -1;
   }) : deals;
 
-  let pipe=0, won=0, lost=0;
+  // Update search UI
+  var searchClear = document.getElementById('searchClear');
+  var searchBadge = document.getElementById('searchBadge');
+  if (q) {
+    searchClear.style.display = 'block';
+    searchBadge.style.display = 'inline';
+    searchBadge.textContent = filt.length + ' resultado' + (filt.length !== 1 ? 's' : '');
+  } else {
+    searchClear.style.display = 'none';
+    searchBadge.style.display = 'none';
+  }
 
-  K.innerHTML = C.STAGES.map(s => {
-    const sd = filt.filter(d => (d.fields.ETAPA||'SQL')===s);
-    const sv = sd.reduce((a,d) => a+(d.fields['VALOR PIPELINE']||0), 0);
+  var pipe=0, won=0, lost=0, wonCount=0, totalCount=filt.length;
+
+  KB.innerHTML = C.STAGES.map(function(s) {
+    var sd = filt.filter(function(d) { return (d.fields.ETAPA||'SQL')===s; });
+    var sv = sd.reduce(function(a,d) { return a+(d.fields['VALOR PIPELINE']||0); }, 0);
     if(s!=='Perdida') pipe+=sv;
-    if(s==='Ganada') won=sd.reduce((a,d)=>a+(d.fields['VALOR CIERRE']||d.fields['VALOR PIPELINE']||0),0);
-    if(s==='Perdida') lost=sd.reduce((a,d)=>a+(d.fields['VALOR PIPELINE']||0),0);
+    if(s==='Ganada') {
+      won=sd.reduce(function(a,d){return a+(d.fields['VALOR CIERRE']||d.fields['VALOR PIPELINE']||0);},0);
+      wonCount=sd.length;
+    }
+    if(s==='Perdida') lost=sd.reduce(function(a,d){return a+(d.fields['VALOR PIPELINE']||0);},0);
 
-    const cards = sd.length===0
-      ? '<div class="empty-col">Sin deals</div>'
-      : sd.map(d => {
-          const f=d.fields;
-          return `<div class="card" draggable="true" data-id="${d.id}" data-s="${s}"
-                    ondragstart="ds(event)" onclick="om('${d.id}')">
-            <div class="card-name">${f.OPORTUNIDAD||'Sin nombre'}</div>
-            <div class="card-vehicle">${f.VEHICULO||''}</div>
-            <div style="font-size:11px;color:var(--neutral-500);margin-bottom:4px;">${f.TELEFONO?'<a href="tel:'+f.TELEFONO+'" style="color:var(--color-accent);text-decoration:none;">'+f.TELEFONO+'</a>':''} ${f.EMAIL?'&middot; '+f.EMAIL:''}</div>
-            <div class="card-row">
-              <div class="card-price">${fmt(f['VALOR PIPELINE'])}</div>
-              <div class="card-vendor">${f['VENDEDOR ASIGNADO']||''}</div>
-            </div>
-            ${f.FOLIO?`<div class="card-folio">${f.FOLIO}</div>`:''}
-            ${s==='Ganada'&&f['VALOR CIERRE']?`<div class="card-folio" style="color:var(--color-success)">Cierre: ${fmt(f['VALOR CIERRE'])}</div>`:''}
-          </div>`;
+    var cards = sd.length===0
+      ? '<div class="empty-col">Sin deals en esta etapa</div>'
+      : sd.map(function(d) {
+          var f=d.fields;
+          var tel = (f.TELEFONO||'').replace(/[^0-9+]/g,'');
+          var telDisplay = f.TELEFONO || '';
+          var waHref = tel ? 'https://wa.me/52'+tel.replace('+','').replace(/^52/,'') : '#';
+          var rd = relDate(f.FECHA_CREACION);
+
+          return '<div class="card" draggable="true" data-id="'+d.id+'" data-s="'+s+'" ' +
+                    'ondragstart="ds(event)" onclick="om(\''+d.id+'\')" tabindex="0" ' +
+                    'onkeydown="cardKey(event,\''+d.id+'\')" role="article" ' +
+                    'aria-label="Deal: '+(f.OPORTUNIDAD||'Sin nombre')+', '+(f.VEHICULO||'')+', '+fmt(f['VALOR PIPELINE'])+'">' +
+            '<div class="card-name">'+( f.OPORTUNIDAD||'Sin nombre')+'</div>' +
+            '<div class="card-vehicle">'+(f.VEHICULO||'Sin vehiculo asignado')+'</div>' +
+            '<div class="card-contact">' +
+              (tel ? '<a href="tel:'+tel+'" class="card-phone-link" onclick="event.stopPropagation()" aria-label="Llamar a '+telDisplay+'">' +
+                '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.11.65.28 1.29.5 1.9a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.62.22 1.25.39 1.9.5A2 2 0 0122 16.92z"/></svg>' +
+                telDisplay+'</a>' : '') +
+              (tel ? '<a href="'+waHref+'" target="_blank" class="card-wa-btn" onclick="event.stopPropagation()" aria-label="WhatsApp a '+telDisplay+'">' +
+                '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>' +
+                '</a>' : '') +
+            '</div>' +
+            '<div class="card-row">' +
+              '<div class="card-price">'+fmt(f['VALOR PIPELINE'])+'</div>' +
+              '<div class="card-vendor">' +
+                '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>' +
+                (f['VENDEDOR ASIGNADO']||'') +
+              '</div>' +
+            '</div>' +
+            '<div class="card-meta">' +
+              (f.FOLIO ? '<div class="card-folio">'+f.FOLIO+'</div>' : '<div></div>') +
+              (rd ? '<div class="card-date">'+rd+'</div>' : '') +
+            '</div>' +
+            (s==='Ganada'&&f['VALOR CIERRE'] ? '<div class="card-folio" style="color:var(--color-success);margin-top:4px">Cierre: '+fmt(f['VALOR CIERRE'])+'</div>' : '') +
+          '</div>';
         }).join('');
 
-    // Determine if this column accepts drops
-    const droppable = s!=='Ganada' && s!=='Perdida' ? 'true' : 'true';
-
-    return `<div class="kcol" data-s="${s}" ondragover="dov(event)" ondragleave="dlv(event)" ondrop="drp(event)">
-      <div class="kcol-head">
-        <div class="lbl">${s} <span class="cnt">${sd.length}</span></div>
-        <div class="val">${fmt(sv)}</div>
-      </div>
-      <div class="kcol-body">${cards}</div>
-    </div>`;
+    return '<div class="kcol" data-s="'+s+'" ondragover="dov(event)" ondragleave="dlv(event)" ondrop="drp(event)">' +
+      '<div class="kcol-head">' +
+        '<div class="lbl">'+s+' <span class="cnt">'+sd.length+'</span></div>' +
+        '<div class="val">'+fmt(sv)+'</div>' +
+      '</div>' +
+      '<div class="kcol-body">'+cards+'</div>' +
+    '</div>';
   }).join('');
 
-  document.getElementById('sDeals').textContent = filt.length;
+  document.getElementById('sDeals').textContent = totalCount;
   document.getElementById('sPipe').textContent = fmt(pipe);
   document.getElementById('sWon').textContent = fmt(won);
   document.getElementById('sLost').textContent = fmt(lost);
+  // Tasa de cierre
+  var rate = totalCount > 0 ? Math.round((wonCount / totalCount) * 100) : 0;
+  document.getElementById('sRate').textContent = rate + '%';
   document.getElementById('tPipe').textContent = fmt(pipe);
 }
 
+// ── KEYBOARD NAV ON CARDS (A11Y) ──
+function cardKey(e, id) {
+  if (e.key === 'Enter' || e.key === ' ') {
+    e.preventDefault();
+    om(id);
+  }
+}
+
+// ── SEARCH ──
+function clearSearch() {
+  var inp = document.getElementById('searchInput');
+  inp.value = '';
+  q = '';
+  render();
+  inp.focus();
+}
+
+function filter(v) { q=v; render(); }
+
 // ── DRAG & DROP ──
-let did = null;
-function ds(e) { did=e.target.dataset.id; e.target.classList.add('dragging'); e.dataTransfer.effectAllowed='move'; }
+var did = null;
+function ds(e) { did=e.target.closest('.card').dataset.id; e.target.closest('.card').classList.add('dragging'); e.dataTransfer.effectAllowed='move'; }
 function dov(e) { e.preventDefault(); e.currentTarget.querySelector('.kcol-body').classList.add('over'); }
 function dlv(e) { e.currentTarget.querySelector('.kcol-body').classList.remove('over'); }
 
 async function drp(e) {
   e.preventDefault();
   e.currentTarget.querySelector('.kcol-body').classList.remove('over');
-  const ns = e.currentTarget.dataset.s;
+  var ns = e.currentTarget.dataset.s;
   if(!did||!ns) return;
-  const deal = deals.find(d=>d.id===did);
+  var deal = deals.find(function(d){return d.id===did;});
   if(!deal) return;
-  const cs = deal.fields.ETAPA||'SQL';
+  var cs = deal.fields.ETAPA||'SQL';
 
   // Check rules
-  const allowed = C.RULES[cs]||[];
+  var allowed = C.RULES[cs]||[];
   if(!allowed.includes(ns)) {
     flash('No se puede mover de '+cs+' a '+ns, true);
     did=null; return;
@@ -400,7 +636,7 @@ async function drp(e) {
 
   // Normal stage change
   deal.fields.ETAPA = ns;
-  const fields = { ETAPA: ns };
+  var fields = { ETAPA: ns };
 
   // Timestamps
   if(ns==='Visita Realizada' && !deal.fields.FECHA_VISITA) {
@@ -414,12 +650,38 @@ async function drp(e) {
   did=null;
 }
 
+// ── STAGE STEPPER ──
+function renderStepper(currentStage) {
+  var steps = ['SQL','Cita Agendada','Visita Realizada','Negociacion','Ganada'];
+  var isPerdida = currentStage === 'Perdida';
+  var currentIdx = steps.indexOf(currentStage);
+  if (isPerdida) currentIdx = -1;
+
+  var html = steps.map(function(s, i) {
+    var cls = '';
+    if (isPerdida) { cls = ''; }
+    else if (i < currentIdx) cls = 'done';
+    else if (i === currentIdx) cls = 'active';
+    return '<div class="step '+cls+'">' +
+      '<div class="step-line"></div>' +
+      '<div class="step-dot">'+(i+1)+'</div>' +
+      '<div class="step-label">'+s+'</div>' +
+    '</div>';
+  }).join('');
+
+  if (isPerdida) {
+    html += '<div class="step lost"><div class="step-dot" style="font-size:12px">X</div><div class="step-label">Perdida</div></div>';
+  }
+
+  document.getElementById('mStepper').innerHTML = html;
+}
+
 // ── MODAL ──
 function om(id) {
-  const d = deals.find(x=>x.id===id);
+  var d = deals.find(function(x){return x.id===id;});
   if(!d) return;
   cid = id;
-  const f = d.fields;
+  var f = d.fields;
   document.getElementById('mTitle').textContent = f.OPORTUNIDAD||'Deal';
   document.getElementById('mNom').value = f.OPORTUNIDAD||'';
   document.getElementById('mTel').value = f.TELEFONO||'';
@@ -427,10 +689,15 @@ function om(id) {
   document.getElementById('mFol').value = f.FOLIO||'';
   document.getElementById('mVeh').value = f.VEHICULO||'';
   // Contact links
-  const tel = (f.TELEFONO||'').replace(/[^0-9+]/g,'');
+  var tel = (f.TELEFONO||'').replace(/[^0-9+]/g,'');
   document.getElementById('mTelLink').href = tel ? 'tel:'+tel : '#';
-  document.getElementById('mWaLink').href = tel ? 'https://wa.me/'+tel.replace('+','') : '#';
+  document.getElementById('mWaLink').href = tel ? 'https://wa.me/52'+tel.replace('+','').replace(/^52/,'') : '#';
   document.getElementById('mEmlLink').href = f.EMAIL ? 'mailto:'+f.EMAIL : '#';
+  // Show/hide contact actions based on data
+  document.getElementById('mTelLink').style.display = tel ? 'inline-flex' : 'none';
+  document.getElementById('mWaLink').style.display = tel ? 'inline-flex' : 'none';
+  document.getElementById('mEmlLink').style.display = f.EMAIL ? 'inline-flex' : 'none';
+
   document.getElementById('mVal').value = f['VALOR PIPELINE']||'';
   document.getElementById('mVend').value = f['VENDEDOR ASIGNADO']||'';
   document.getElementById('mVin').value = f['VIN FACTURADO']||'';
@@ -440,50 +707,52 @@ function om(id) {
   document.getElementById('mNot').value = f.NOTAS||'';
 
   // Populate stage dropdown with allowed transitions
-  const cs = f.ETAPA||'SQL';
-  const pendingStage = f._pendingStage || null;
+  var cs = f.ETAPA||'SQL';
+  var pendingStage = f._pendingStage || null;
   delete f._pendingStage;
-  const sel = document.getElementById('mEta');
-  const allowed = [cs, ...(C.RULES[cs]||[])];
-  const selectedStage = pendingStage || cs;
-  sel.innerHTML = allowed.map(s => `<option${s===selectedStage?' selected':''}>${s}</option>`).join('');
+  var sel = document.getElementById('mEta');
+  var allowed = [cs].concat(C.RULES[cs]||[]);
+  var selectedStage = pendingStage || cs;
+  sel.innerHTML = allowed.map(function(s) { return '<option'+(s===selectedStage?' selected':'')+'>'+s+'</option>'; }).join('');
 
+  renderStepper(selectedStage);
   onStageChange();
   document.getElementById('OV').classList.add('open');
 }
 
 function onStageChange() {
-  const v = document.getElementById('mEta').value;
+  var v = document.getElementById('mEta').value;
   document.getElementById('mCierreSection').style.display = v==='Ganada'?'block':'none';
   document.getElementById('mPerdidaSection').style.display = v==='Perdida'?'block':'none';
+  renderStepper(v);
 }
 
 function cm() { document.getElementById('OV').classList.remove('open'); cid=null; }
 
 async function save() {
   if(!cid) return;
-  const deal = deals.find(d=>d.id===cid);
-  const oldStage = deal?.fields.ETAPA||'SQL';
-  const newStage = document.getElementById('mEta').value;
-  const vinVal = document.getElementById('mVin').value;
+  var deal = deals.find(function(d){return d.id===cid;});
+  var oldStage = deal ? (deal.fields.ETAPA||'SQL') : 'SQL';
+  var newStage = document.getElementById('mEta').value;
+  var vinVal = document.getElementById('mVin').value;
 
   // Validate VIN format if provided
   if (vinVal && !isVinValid(vinVal)) {
-    flash('VIN inválido: debe ser 17 caracteres alfanuméricos (sin I, O, Q)', true);
+    flash('VIN invalido: debe ser 17 caracteres alfanumericos (sin I, O, Q)', true);
     return;
   }
 
   // === REGLAS DE NEGOCIO PARA GANADA ===
   if (newStage === 'Ganada') {
     if (!vinVal) {
-      flash('Captura el VIN del vehículo facturado para cerrar la venta', true);
+      flash('Captura el VIN del vehiculo facturado para cerrar la venta', true);
       return;
     }
     if (!isVinValid(vinVal)) {
       flash('El VIN debe ser exactamente 17 caracteres (sin I, O, Q)', true);
       return;
     }
-    const valorCierre = parseFloat(document.getElementById('mValC').value);
+    var valorCierre = parseFloat(document.getElementById('mValC').value);
     if (!valorCierre || valorCierre <= 0) {
       flash('Captura el valor de cierre (monto real de la venta)', true);
       return;
@@ -492,14 +761,14 @@ async function save() {
 
   // === REGLAS DE NEGOCIO PARA PERDIDA ===
   if (newStage === 'Perdida') {
-    const motivo = document.getElementById('mMot').value;
+    var motivo = document.getElementById('mMot').value;
     if (!motivo) {
-      flash('Selecciona el motivo de pérdida', true);
+      flash('Selecciona el motivo de perdida', true);
       return;
     }
   }
 
-  const fields = {
+  var fields = {
     ETAPA: newStage,
     'VENDEDOR ASIGNADO': document.getElementById('mVend').value,
     'VIN FACTURADO': document.getElementById('mVin').value,
@@ -520,7 +789,7 @@ async function save() {
   }
 
   // Clean nulls
-  Object.keys(fields).forEach(k => { if(fields[k]===null||fields[k]==='') delete fields[k]; });
+  Object.keys(fields).forEach(function(k) { if(fields[k]===null||fields[k]==='') delete fields[k]; });
 
   try {
     await updateRec(cid, fields);
@@ -531,14 +800,14 @@ async function save() {
     render();
     cm();
     flash('Guardado');
-  } catch(err) { alert('Error: '+err.message); }
+  } catch(err) { flash('Error: '+err.message, true); }
 }
 
 // ── VIN VALIDATION ──
 function validateVin(input) {
-  let v = input.value.toUpperCase().replace(/[^A-Z0-9]/g,'').replace(/[IOQ]/g,'');
+  var v = input.value.toUpperCase().replace(/[^A-Z0-9]/g,'').replace(/[IOQ]/g,'');
   input.value = v;
-  const hint = document.getElementById('mVinHint');
+  var hint = document.getElementById('mVinHint');
   if (v.length === 0) { hint.textContent = ''; hint.style.color = ''; }
   else if (v.length < 17) { hint.textContent = v.length + '/17 caracteres'; hint.style.color = 'var(--color-warning)'; }
   else if (v.length === 17) { hint.textContent = 'VIN valido'; hint.style.color = 'var(--color-success)'; }
@@ -549,40 +818,50 @@ function isVinValid(v) {
   return /^[A-HJ-NPR-Z0-9]{17}$/.test(v);
 }
 
-// ── UTILS ──
+// ── TOAST (replaces old flash) ──
+var toastTimer = null;
 function flash(msg, err) {
-  const el = document.getElementById('saveStatus');
-  el.textContent = msg;
-  el.style.background = err ? 'var(--color-error)' : 'var(--color-success)';
-  el.style.display = 'block';
-  setTimeout(() => el.style.display='none', 2000);
+  var el = document.getElementById('toast');
+  var icon = document.getElementById('toastIcon');
+  var msgEl = document.getElementById('toastMsg');
+  msgEl.textContent = msg;
+  el.className = 'toast show ' + (err ? 'error' : 'success');
+  if (err) {
+    icon.innerHTML = '<circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/>';
+  } else {
+    icon.innerHTML = '<path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/>';
+  }
+  if (toastTimer) clearTimeout(toastTimer);
+  toastTimer = setTimeout(function() { el.className = 'toast'; }, 2500);
 }
 
 function sw(b) {
   brand=b;
-  document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('active',t.dataset.b===b));
+  document.querySelectorAll('.tab').forEach(function(t) {
+    var isActive = t.dataset.b===b;
+    t.classList.toggle('active', isActive);
+    t.setAttribute('aria-selected', isActive ? 'true' : 'false');
+  });
   refresh();
 }
 
-function filter(v) { q=v; render(); }
-
 async function refresh() {
-  document.getElementById('K').innerHTML = '<div class="loading"><div class="spinner"></div>Cargando...</div>';
+  renderSkeleton();
   try {
     deals = await loadAll();
-    const created = await syncLeadsToPipeline();
+    var created = await syncLeadsToPipeline();
     if (created > 0) {
       deals = await loadAll(); // Reload with new records
       flash(created + ' lead(s) nuevo(s) agregado(s) al pipeline');
     }
     render();
   }
-  catch(e) { document.getElementById('K').innerHTML = '<div class="loading" style="color:var(--color-error)">Error: '+e.message+'</div>'; }
+  catch(e) { document.getElementById('K').innerHTML = '<div class="loading-center" style="color:var(--color-error)">Error: '+e.message+'</div>'; }
 }
 
 document.addEventListener('DOMContentLoaded', refresh);
-document.getElementById('OV').addEventListener('click', e => { if(e.target===e.currentTarget) cm(); });
-document.addEventListener('keydown', e => { if(e.key==='Escape') cm(); });
+document.getElementById('OV').addEventListener('click', function(e) { if(e.target===e.currentTarget) cm(); });
+document.addEventListener('keydown', function(e) { if(e.key==='Escape') cm(); });
 </script>
 </body>
 </html>
