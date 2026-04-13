@@ -390,7 +390,15 @@ async function drp(e) {
     did=null; return;
   }
 
-  // Optimistic update
+  // Ganada/Perdida require modal to fill mandatory fields
+  if(ns==='Ganada' || ns==='Perdida') {
+    deal.fields._pendingStage = ns;
+    om(did);
+    did=null;
+    return;
+  }
+
+  // Normal stage change
   deal.fields.ETAPA = ns;
   const fields = { ETAPA: ns };
 
@@ -398,10 +406,6 @@ async function drp(e) {
   if(ns==='Visita Realizada' && !deal.fields.FECHA_VISITA) {
     fields.FECHA_VISITA = new Date().toISOString();
     deal.fields.FECHA_VISITA = fields.FECHA_VISITA;
-  }
-  if(ns==='Ganada' && !deal.fields['FECHA CIERRE']) {
-    fields['FECHA CIERRE'] = new Date().toISOString().split('T')[0];
-    deal.fields['FECHA CIERRE'] = fields['FECHA CIERRE'];
   }
 
   render();
@@ -437,9 +441,12 @@ function om(id) {
 
   // Populate stage dropdown with allowed transitions
   const cs = f.ETAPA||'SQL';
+  const pendingStage = f._pendingStage || null;
+  delete f._pendingStage;
   const sel = document.getElementById('mEta');
   const allowed = [cs, ...(C.RULES[cs]||[])];
-  sel.innerHTML = allowed.map(s => `<option${s===cs?' selected':''}>${s}</option>`).join('');
+  const selectedStage = pendingStage || cs;
+  sel.innerHTML = allowed.map(s => `<option${s===selectedStage?' selected':''}>${s}</option>`).join('');
 
   onStageChange();
   document.getElementById('OV').classList.add('open');
@@ -460,19 +467,36 @@ async function save() {
   const newStage = document.getElementById('mEta').value;
   const vinVal = document.getElementById('mVin').value;
 
-  // Validate VIN
+  // Validate VIN format if provided
   if (vinVal && !isVinValid(vinVal)) {
-    flash('VIN invalido: debe ser 17 caracteres alfanumericos (sin I, O, Q)', true);
+    flash('VIN inválido: debe ser 17 caracteres alfanuméricos (sin I, O, Q)', true);
     return;
   }
-  // Require VIN for Ganada
-  if (newStage === 'Ganada' && !isVinValid(vinVal)) {
-    flash('VIN requerido para marcar como Ganada', true);
-    return;
+
+  // === REGLAS DE NEGOCIO PARA GANADA ===
+  if (newStage === 'Ganada') {
+    if (!vinVal) {
+      flash('Captura el VIN del vehículo facturado para cerrar la venta', true);
+      return;
+    }
+    if (!isVinValid(vinVal)) {
+      flash('El VIN debe ser exactamente 17 caracteres (sin I, O, Q)', true);
+      return;
+    }
+    const valorCierre = parseFloat(document.getElementById('mValC').value);
+    if (!valorCierre || valorCierre <= 0) {
+      flash('Captura el valor de cierre (monto real de la venta)', true);
+      return;
+    }
   }
-  if (newStage === 'Ganada' && !vinVal) {
-    flash('Captura el VIN para cerrar la venta', true);
-    return;
+
+  // === REGLAS DE NEGOCIO PARA PERDIDA ===
+  if (newStage === 'Perdida') {
+    const motivo = document.getElementById('mMot').value;
+    if (!motivo) {
+      flash('Selecciona el motivo de pérdida', true);
+      return;
+    }
   }
 
   const fields = {
