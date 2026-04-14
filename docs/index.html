@@ -426,8 +426,8 @@ async function syncLeadsToPipeline() {
     (d.fields.LEAD||[]).forEach(id => linkedLeadIds.add(id));
   });
 
-  // 3. Find leads without pipeline record
-  const missing = leads.filter(l => !linkedLeadIds.has(l.id));
+  // 3. Find leads without pipeline record (ignore empty leads without name)
+  const missing = leads.filter(l => !linkedLeadIds.has(l.id) && l.fields.NOMBRE);
   if (missing.length === 0) return 0;
 
   // 4. Create pipeline records in batches of 10
