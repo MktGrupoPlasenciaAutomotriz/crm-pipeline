@@ -332,7 +332,7 @@ button:focus-visible, a:focus-visible, [tabindex]:focus-visible { outline: 2px s
           <div class="mf"><label for="mValC">Valor Cierre</label><input id="mValC" type="number"></div>
         </div>
         <div class="mrow">
-          <div class="mf"><label for="mFecC">Fecha Cierre</label><input id="mFecC" type="date"></div>
+          <div class="mf"><label for="mFecC">Fecha Cierre</label><input id="mFecC" type="date"><div style="font-size:9px;color:var(--neutral-400);margin-top:2px;">Máximo 7 días de antigüedad (requerimiento Meta)</div></div>
           <div class="mf">&nbsp;</div>
         </div>
       </div>
@@ -762,8 +762,26 @@ async function save() {
   if (newStage === 'Perdida') {
     var motivo = document.getElementById('mMot').value;
     if (!motivo) {
-      flash('Selecciona el motivo de perdida', true);
+      flash('Selecciona el motivo de pérdida', true);
       return;
+    }
+  }
+
+  // === REGLA DE 7 DÍAS (Meta CAPI) ===
+  if (newStage === 'Ganada' || newStage === 'Visita Realizada') {
+    var fechaCierre = document.getElementById('mFecC').value;
+    if (newStage === 'Ganada' && fechaCierre) {
+      var fechaMs = new Date(fechaCierre).getTime();
+      var hoyMs = new Date().getTime();
+      var diffDias = Math.floor((hoyMs - fechaMs) / (1000 * 60 * 60 * 24));
+      if (diffDias > 7) {
+        flash('La fecha de cierre no puede tener más de 7 días de antigüedad (Meta no acepta eventos con más de 7 días de desfase)', true);
+        return;
+      }
+      if (diffDias < 0) {
+        flash('La fecha de cierre no puede ser en el futuro', true);
+        return;
+      }
     }
   }
 
