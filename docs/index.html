@@ -446,6 +446,9 @@ async function syncLeadsToPipeline() {
           TELEFONO: f.TELEFONO || '',
           EMAIL: f.EMAIL || '',
           FOLIO: f.FOLIO || '',
+          NOMBRE: f.NOMBRE || '',
+          'APELLIDO PATERNO': f['APELLIDO PATERNO'] || '',
+          'APELLIDO MATERNO': f['APELLIDO MATERNO'] || '',
           VENDEDOR: f['VENDEDOR DIGITAL'] || 'VENDEDOR DIGITAL',
           FECHA_CREACION: f.fecha_registro || new Date().toISOString(),
           LEAD: [l.id]
