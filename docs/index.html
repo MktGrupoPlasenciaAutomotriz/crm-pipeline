@@ -322,7 +322,7 @@ button:focus-visible, a:focus-visible, [tabindex]:focus-visible { outline: 2px s
             <label for="mEta">Etapa</label>
             <select id="mEta" onchange="onStageChange()"></select>
           </div>
-          <div class="mf"><label for="mVend">Vendedor Asignado</label><input id="mVend" placeholder="Tu nombre"></div>
+          <div class="mf"><label for="mVend">Vendedor Asignado</label><select id="mVend"><option value="">Selecciona vendedor</option></select><div class="hint" id="mVendHint">Se bloquea al marcar Visita Realizada</div></div>
         </div>
       </div>
       <div class="msec" id="mCierreSection" style="display:none">
@@ -332,7 +332,7 @@ button:focus-visible, a:focus-visible, [tabindex]:focus-visible { outline: 2px s
           <div class="mf"><label for="mValC">Valor Cierre</label><input id="mValC" type="number"></div>
         </div>
         <div class="mrow">
-          <div class="mf"><label for="mFecC">Fecha Cierre</label><input id="mFecC" type="date"><div style="font-size:9px;color:var(--neutral-400);margin-top:2px;">Máximo 7 días de antigüedad (requerimiento Meta)</div></div>
+          <div class="mf"><label for="mFecC">Fecha Cierre</label><input id="mFecC" type="text" readonly placeholder="Se registra al cerrar"><div style="font-size:9px;color:var(--neutral-400);margin-top:2px;">Se registra automaticamente en el momento que marcas la venta como Ganada</div></div>
           <div class="mf">&nbsp;</div>
         </div>
       </div>
@@ -380,6 +380,49 @@ const C = {
     'Perdida': []
   }
 };
+
+// Vendedores predefinidos por marca (lote Otero — 3 marcas en un solo complejo)
+const VENDEDORES = {
+  hyundai:    ['Supervisor Digital - Santa Anita', 'Supervisor Digital Plasencia'],
+  stellantis: ['Supervisor Digital - Santa Anita', 'Supervisor Digital Plasencia'],
+  seminuevos: ['Pablo Morales', 'Salvador Jimenez', 'José Ayala']
+};
+
+// Formatea timestamp ISO o fecha a string legible
+function formatDateDisplay(iso) {
+  if (!iso) return '';
+  var d = new Date(iso);
+  if (isNaN(d.getTime())) return iso;
+  return d.toLocaleDateString('es-MX', {year:'numeric', month:'short', day:'numeric'});
+}
+
+// Auto-asigna vendedor default segun marca/sucursal/marca del vehiculo
+function assignDefaultVendor(fields) {
+  fields = fields || {};
+  var list = VENDEDORES[brand] || [];
+  if (!list.length) return '';
+
+  if (brand === 'hyundai' || brand === 'stellantis') {
+    // Determinar sucursal desde campo SUCURSAL o VEHICULO
+    var suc = (fields.SUCURSAL || fields.AGENCIA || '').toLowerCase();
+    if (suc.indexOf('santa anita') !== -1) return list.find(function(v){return v.indexOf('Santa Anita')!==-1;}) || list[0];
+    if (suc.indexOf('plasencia') !== -1 || suc.indexOf('otero') !== -1) return list.find(function(v){return v.indexOf('Plasencia')!==-1;}) || list[0];
+    // Default: Plasencia (lote principal Otero)
+    return list.find(function(v){return v.indexOf('Plasencia')!==-1;}) || list[0];
+  }
+
+  if (brand === 'seminuevos') {
+    // Lote Otero con 3 marcas: Mazda (Pablo), Stellantis RAM/Peugeot/Jeep/Dodge/Fiat (Salvador), Ford (Jose)
+    var veh = (fields.VEHICULO || fields.MARCA || '').toUpperCase();
+    if (/\bFORD\b/.test(veh)) return 'José Ayala';
+    if (/\bMAZDA\b/.test(veh)) return 'Pablo Morales';
+    if (/\b(RAM|PEUGEOT|JEEP|DODGE|FIAT|CHRYSLER|CITROEN)\b/.test(veh)) return 'Salvador Jimenez';
+    // Sin match: default Pablo (primero del lote)
+    return list[0];
+  }
+
+  return list[0] || '';
+}
 
 let brand = 'hyundai', deals = [], cid = null, q = '';
 
@@ -565,6 +608,7 @@ function render() {
               (rd ? '<div class="card-date">'+rd+'</div>' : '') +
             '</div>' +
             (s==='Ganada'&&f['VALOR CIERRE'] ? '<div class="card-folio" style="color:var(--color-success);margin-top:4px">Cierre: '+fmt(f['VALOR CIERRE'])+'</div>' : '') +
+            (s==='Ganada'&&f['FECHA CIERRE'] ? '<div class="card-folio" style="color:var(--color-success);opacity:0.75;font-size:10px;margin-top:2px">Cerrada el '+formatDateDisplay(f['FECHA CIERRE'])+'</div>' : '') +
           '</div>';
         }).join('');
 
@@ -701,10 +745,18 @@ function om(id) {
   document.getElementById('mEmlLink').style.display = f.EMAIL ? 'inline-flex' : 'none';
 
   document.getElementById('mVal').value = f['VALOR PIPELINE']||'';
-  document.getElementById('mVend').value = f['VENDEDOR ASIGNADO']||'';
+
+  // Poblar dropdown de vendedores segun marca
+  var vendSelect = document.getElementById('mVend');
+  vendSelect.innerHTML = '<option value="">Selecciona vendedor</option>' +
+    (VENDEDORES[brand]||[]).map(function(v){return '<option value="'+v+'">'+v+'</option>';}).join('');
+  // Auto-asignar default si no hay vendedor asignado
+  var currentVendor = f['VENDEDOR ASIGNADO'] || assignDefaultVendor(f);
+  vendSelect.value = currentVendor;
+
   document.getElementById('mVin').value = f['VIN FACTURADO']||'';
   document.getElementById('mValC').value = f['VALOR CIERRE']||'';
-  document.getElementById('mFecC').value = f['FECHA CIERRE']||'';
+  document.getElementById('mFecC').value = formatDateDisplay(f['FECHA CIERRE']||'');
   document.getElementById('mMot').value = f['MOTIVO PERDIDA']||'';
   document.getElementById('mNot').value = f.NOTAS||'';
 
@@ -719,7 +771,42 @@ function om(id) {
 
   renderStepper(selectedStage);
   onStageChange();
+  applyStageLocks(cs);
   document.getElementById('OV').classList.add('open');
+}
+
+// Aplica bloqueos segun el stage actual de la oportunidad
+function applyStageLocks(stage) {
+  var vendorLocked = stage !== 'Cita Agendada';
+  var allLocked = stage === 'Ganada' || stage === 'Perdida';
+
+  var vendSelect = document.getElementById('mVend');
+  vendSelect.disabled = vendorLocked;
+  var vendHint = document.getElementById('mVendHint');
+  if (vendHint) {
+    vendHint.textContent = vendorLocked
+      ? 'Vendedor bloqueado — no se puede cambiar despues de Visita Realizada'
+      : 'Se bloquea al marcar Visita Realizada';
+  }
+
+  // Lock todo el modal si la venta ya es Ganada/Perdida
+  var editableInputs = ['mVeh','mVal','mVin','mValC'];
+  editableInputs.forEach(function(id){
+    var el = document.getElementById(id);
+    if (el) el.readOnly = allLocked;
+  });
+  document.getElementById('mEta').disabled = allLocked;
+  document.getElementById('mMot').disabled = allLocked;
+  // Notas queda editable siempre (observaciones post-venta)
+
+  // Boton Guardar
+  var saveBtn = document.querySelector('#OV .btn-primary');
+  var cancelBtn = document.querySelector('#OV .btn-cancel');
+  if (saveBtn) saveBtn.style.display = allLocked ? 'none' : '';
+  if (cancelBtn) cancelBtn.textContent = allLocked ? 'Cerrar' : 'Cancelar';
+
+  // Fecha Cierre siempre readonly (se setea automaticamente)
+  document.getElementById('mFecC').readOnly = true;
 }
 
 function onStageChange() {
@@ -737,6 +824,13 @@ async function save() {
   var oldStage = deal ? (deal.fields.ETAPA||'Cita Agendada') : 'Cita Agendada';
   var newStage = document.getElementById('mEta').value;
   var vinVal = document.getElementById('mVin').value;
+  var vendedorVal = document.getElementById('mVend').value;
+
+  // Una vez Ganada/Perdida no se permite modificar nada (safety net)
+  if (oldStage === 'Ganada' || oldStage === 'Perdida') {
+    flash('Esta venta ya fue cerrada y no puede modificarse', true);
+    return;
+  }
 
   // Validate VIN format if provided
   if (vinVal && !isVinValid(vinVal)) {
@@ -744,8 +838,18 @@ async function save() {
     return;
   }
 
+  // === REGLA: Vendedor requerido para avanzar a Visita Realizada ===
+  if (newStage === 'Visita Realizada' && !vendedorVal) {
+    flash('Asigna un vendedor antes de marcar Visita Realizada', true);
+    return;
+  }
+
   // === REGLAS DE NEGOCIO PARA GANADA ===
   if (newStage === 'Ganada') {
+    if (!vendedorVal) {
+      flash('Asigna un vendedor antes de cerrar la venta', true);
+      return;
+    }
     if (!vinVal) {
       flash('Captura el VIN del vehiculo facturado para cerrar la venta', true);
       return;
@@ -770,42 +874,24 @@ async function save() {
     }
   }
 
-  // === REGLA DE 7 DÍAS (Meta CAPI) ===
-  if (newStage === 'Ganada' || newStage === 'Visita Realizada') {
-    var fechaCierre = document.getElementById('mFecC').value;
-    if (newStage === 'Ganada' && fechaCierre) {
-      var fechaMs = new Date(fechaCierre).getTime();
-      var hoyMs = new Date().getTime();
-      var diffDias = Math.floor((hoyMs - fechaMs) / (1000 * 60 * 60 * 24));
-      if (diffDias > 7) {
-        flash('La fecha de cierre no puede tener más de 7 días de antigüedad (Meta no acepta eventos con más de 7 días de desfase)', true);
-        return;
-      }
-      if (diffDias < 0) {
-        flash('La fecha de cierre no puede ser en el futuro', true);
-        return;
-      }
-    }
-  }
-
   var fields = {
     ETAPA: newStage,
-    'VENDEDOR ASIGNADO': document.getElementById('mVend').value,
+    'VENDEDOR ASIGNADO': vendedorVal,
     'VIN FACTURADO': document.getElementById('mVin').value,
     'VALOR CIERRE': parseFloat(document.getElementById('mValC').value)||null,
-    'FECHA CIERRE': document.getElementById('mFecC').value||null,
     'MOTIVO PERDIDA': document.getElementById('mMot').value||null,
     NOTAS: document.getElementById('mNot').value,
     'VALOR PIPELINE': parseFloat(document.getElementById('mVal').value)||null,
     VEHICULO: document.getElementById('mVeh').value
   };
 
-  // Timestamps
+  // Timestamps automaticos
   if(newStage==='Visita Realizada' && oldStage!=='Visita Realizada' && !deal.fields.FECHA_VISITA) {
     fields.FECHA_VISITA = new Date().toISOString();
   }
-  if(newStage==='Ganada' && !fields['FECHA CIERRE']) {
-    fields['FECHA CIERRE'] = new Date().toISOString().split('T')[0];
+  // Fecha Cierre: se registra al MOMENTO del click (timestamp exacto, no editable)
+  if(newStage==='Ganada' && oldStage!=='Ganada') {
+    fields['FECHA CIERRE'] = new Date().toISOString();
   }
 
   // Clean nulls
