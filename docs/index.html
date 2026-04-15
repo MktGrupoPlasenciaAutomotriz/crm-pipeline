@@ -381,9 +381,12 @@ const C = {
   }
 };
 
-// Vendedores predefinidos por marca (lote Otero — 3 marcas en un solo complejo)
+// Vendedores predefinidos por marca
+// - Hyundai: vendedores reales (autos nuevos)
+// - Stellantis: supervisores digitales por sucursal
+// - Seminuevos: lote Otero con 3 marcas en un solo complejo
 const VENDEDORES = {
-  hyundai:    ['Supervisor Digital - Santa Anita', 'Supervisor Digital Plasencia'],
+  hyundai:    ['Carlos Ponce', 'Alessa Funez'],
   stellantis: ['Supervisor Digital - Santa Anita', 'Supervisor Digital Plasencia'],
   seminuevos: ['Pablo Morales', 'Salvador Jimenez', 'José Ayala']
 };
@@ -402,13 +405,23 @@ function assignDefaultVendor(fields) {
   var list = VENDEDORES[brand] || [];
   if (!list.length) return '';
 
-  if (brand === 'hyundai' || brand === 'stellantis') {
-    // Determinar sucursal desde campo SUCURSAL o VEHICULO
+  if (brand === 'stellantis') {
+    // Stellantis usa supervisores digitales por sucursal (el nombre mismo indica sucursal)
     var suc = (fields.SUCURSAL || fields.AGENCIA || '').toLowerCase();
     if (suc.indexOf('santa anita') !== -1) return list.find(function(v){return v.indexOf('Santa Anita')!==-1;}) || list[0];
     if (suc.indexOf('plasencia') !== -1 || suc.indexOf('otero') !== -1) return list.find(function(v){return v.indexOf('Plasencia')!==-1;}) || list[0];
     // Default: Plasencia (lote principal Otero)
     return list.find(function(v){return v.indexOf('Plasencia')!==-1;}) || list[0];
+  }
+
+  if (brand === 'hyundai') {
+    // Hyundai: vendedores reales mapeados por sucursal del lead
+    // Carlos Ponce = Plasencia | Alessa Funez = Santa Anita
+    var suc = (fields.SUCURSAL || fields.AGENCIA || '').toLowerCase();
+    if (suc.indexOf('santa anita') !== -1) return 'Alessa Funez';
+    if (suc.indexOf('plasencia') !== -1 || suc.indexOf('otero') !== -1) return 'Carlos Ponce';
+    // Default: Plasencia (lote principal)
+    return 'Carlos Ponce';
   }
 
   if (brand === 'seminuevos') {
